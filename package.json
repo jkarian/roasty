@@ -1,0 +1,17 @@
+{
+  "name": "roasty",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Draw something. Regret it. — local tuning bench for Roasty.",
+  "scripts": {
+    "start": "node server.js",
+    "keys": "node scripts/import-keys.mjs",
+    "pregen": "node scripts/pregen-audio.mjs",
+    "probe": "node scripts/pregen-audio.mjs --probe"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.72.0"
+  },
+  "engines": { "node": ">=20" }
+}

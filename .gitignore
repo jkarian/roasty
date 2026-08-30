@@ -1,0 +1,10 @@
+# secrets — never commit
+.env
+.env.local
+keys.txt
+
+# generated
+node_modules/
+public/audio/*.mp3
+cache/
+npm-debug.log*

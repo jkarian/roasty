@@ -1,0 +1,1229 @@
+{
+ "version": 1,
+ "generatedAt": "2026-08-30T05:32:13.970Z",
+ "voiceId": "Ym1lepVbBruoa0yJFohT",
+ "model": "eleven_v3",
+ "format": "mp3_44100_128",
+ "clips": {
+  "suspicion|Wait. What is that.": {
+   "file": "vamp-8ff94f5427.mp3",
+   "group": "vamp"
+  },
+  "suspicion|Hold on. Hold on.": {
+   "file": "vamp-f9fe4f3ceb.mp3",
+   "group": "vamp"
+  },
+  "suspicion|Okay what am I looking at. What AM I looking at.": {
+   "file": "vamp-e902969778.mp3",
+   "group": "vamp"
+  },
+  "suspicion|Wait wait wait.": {
+   "file": "vamp-b2f3d8108e.mp3",
+   "group": "vamp"
+  },
+  "suspicion|Hold on. Let me look. LET ME LOOK.": {
+   "file": "vamp-17746a78a1.mp3",
+   "group": "vamp"
+  },
+  "suspicion|Whaaaat is— hold on.": {
+   "file": "vamp-5b7ed1db3f.mp3",
+   "group": "vamp"
+  },
+  "suspicion|Wh— okay. Okay. Looking.": {
+   "file": "vamp-68a1985346.mp3",
+   "group": "vamp"
+  },
+  "murmurNeutral|Mm.": {
+   "file": "murmur-2ca74d6117.mp3",
+   "group": "murmur"
+  },
+  "murmurNeutral|Hm.": {
+   "file": "murmur-a328f2d898.mp3",
+   "group": "murmur"
+  },
+  "murmurNeutral|Okay.": {
+   "file": "murmur-e7b8b963c8.mp3",
+   "group": "murmur"
+  },
+  "murmurNeutral|Uh huh.": {
+   "file": "murmur-92a61ba0ca.mp3",
+   "group": "murmur"
+  },
+  "murmurNeutral|Right. Right.": {
+   "file": "murmur-df97e584e3.mp3",
+   "group": "murmur"
+  },
+  "murmurNeutral|Mm hm.": {
+   "file": "murmur-d8e9770280.mp3",
+   "group": "murmur"
+  },
+  "murmurNeutral|Sure. Sure.": {
+   "file": "murmur-289ec14233.mp3",
+   "group": "murmur"
+  },
+  "murmurNeutral|Okay okay.": {
+   "file": "murmur-56b539dd41.mp3",
+   "group": "murmur"
+  },
+  "murmurNeutral|Mhm. Good.": {
+   "file": "murmur-5b84f193a0.mp3",
+   "group": "murmur"
+  },
+  "murmurNeutral|Fine. That's fine.": {
+   "file": "murmur-acc85f4b0c.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|Oh no.": {
+   "file": "murmur-c5a83bc49a.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|Wait.": {
+   "file": "murmur-91b75cb608.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|Hm. Hmmm.": {
+   "file": "murmur-e984f966f0.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|What is— okay.": {
+   "file": "murmur-846d314947.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|Oh boy.": {
+   "file": "murmur-a7c25ba4f3.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|Huh.": {
+   "file": "murmur-01ceffdff2.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|Tsk.": {
+   "file": "murmur-bcd980544c.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|Really.": {
+   "file": "murmur-8b893f3bef.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|No. No no no.": {
+   "file": "murmur-7acc216309.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|Ehh?": {
+   "file": "murmur-5959c1a124.mp3",
+   "group": "murmur"
+  },
+  "murmurConcern|Wha—": {
+   "file": "murmur-67dae4bb16.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Ugh.": {
+   "file": "murmur-42591bb159.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Oof.": {
+   "file": "murmur-4f18d7ee2e.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Hoo boy.": {
+   "file": "murmur-9b6a36a59e.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Nngh.": {
+   "file": "murmur-f0971f5452.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Hhh.": {
+   "file": "murmur-208ba1b599.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Oh man.": {
+   "file": "murmur-13b852dfa1.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Why.": {
+   "file": "murmur-9abf3d8393.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Wow. Okay. Wow.": {
+   "file": "murmur-2eda3c9ad3.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Unbelievable.": {
+   "file": "murmur-5281aa5496.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|B-b-but—": {
+   "file": "murmur-2bc29f33e8.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Whyyy.": {
+   "file": "murmur-41df500040.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Oh": {
+   "file": "murmur-eeb3a0f3d1.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|. Oh no.": {
+   "file": "murmur-1094c46c9f.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|. Okay. Okay.": {
+   "file": "murmur-694221f0ef.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Are you": {
+   "file": "murmur-f8d5a1101b.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|kidding me.": {
+   "file": "murmur-b69f5ab9ea.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|Oh for": {
+   "file": "murmur-1697e42696.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|sake.": {
+   "file": "murmur-aefc818079.mp3",
+   "group": "murmur"
+  },
+  "murmurGroan|it. Keep going.": {
+   "file": "murmur-0c924d92da.mp3",
+   "group": "murmur"
+  },
+  "oath|By Van Gogh's missing ear!": {
+   "file": "oath-d260fbbd80.mp3",
+   "group": "oath"
+  },
+  "oath|Sweet mother of Monet!": {
+   "file": "oath-725bf80340.mp3",
+   "group": "oath"
+  },
+  "oath|By Picasso's cubes!": {
+   "file": "oath-ec1e15fcd1.mp3",
+   "group": "oath"
+  },
+  "oath|Holy Pollock paint splotch!": {
+   "file": "oath-c93979d848.mp3",
+   "group": "oath"
+  },
+  "oath|By Dali's melting clocks!": {
+   "file": "oath-707c5539c0.mp3",
+   "group": "oath"
+  },
+  "oath|Great Michelangelo's David!": {
+   "file": "oath-5fce18976c.mp3",
+   "group": "oath"
+  },
+  "oath|What in the Andy Warhol is that!": {
+   "file": "oath-c28eb0187e.mp3",
+   "group": "oath"
+  },
+  "oath|Bob Ross's happy little accidents!": {
+   "file": "oath-9eb0bcd280.mp3",
+   "group": "oath"
+  },
+  "oath|Holy Frida's unibrow!": {
+   "file": "oath-739934a00d.mp3",
+   "group": "oath"
+  },
+  "oath|By the ghost of Rembrandt!": {
+   "file": "oath-3507c89877.mp3",
+   "group": "oath"
+  },
+  "oath|Son of a Munch scream!": {
+   "file": "oath-567847057d.mp3",
+   "group": "oath"
+  },
+  "oath|Holy Da Vinci code!": {
+   "file": "oath-2d5621aa16.mp3",
+   "group": "oath"
+  },
+  "oath|What the Banksy!": {
+   "file": "oath-a66351e562.mp3",
+   "group": "oath"
+  },
+  "suspicion|Okay. Okay okay okay. We're drawing. Good.": {
+   "file": "reflex-87a9aed7bd.mp3",
+   "group": "reflex"
+  },
+  "suspicion|First mark. That's... something. Keep going.": {
+   "file": "reflex-5cc18c7578.mp3",
+   "group": "reflex"
+  },
+  "suspicion|There it is. A line. We have a line.": {
+   "file": "reflex-b88b84394f.mp3",
+   "group": "reflex"
+  },
+  "suspicion|FINALLY. Okay. Go. Keep going.": {
+   "file": "reflex-ff52119d64.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Okay. Late, but okay. Show me.": {
+   "file": "reflex-efeccfb5bf.mp3",
+   "group": "reflex"
+  },
+  "suspicion|We're starting. We're actually starting.": {
+   "file": "reflex-57e9355c6f.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Oh, NOW you draw.": {
+   "file": "reflex-6d5b69e50c.mp3",
+   "group": "reflex"
+  },
+  "suspicion|You're starting. Now. With the clock like THAT.": {
+   "file": "reflex-0684e24d3c.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Fine. Go. Go go go.": {
+   "file": "reflex-3bdc6caaf8.mp3",
+   "group": "reflex"
+  },
+  "alarm|Come on come on. Draw something. ANYTHING.": {
+   "file": "reflex-57e48f5e95.mp3",
+   "group": "reflex"
+  },
+  "alarm|Draw. Please. Anything. A shape. A dot. GO.": {
+   "file": "reflex-1b5b6ef848.mp3",
+   "group": "reflex"
+  },
+  "alarm|The canvas is still empty. Why is it empty.": {
+   "file": "reflex-9299f6ce36.mp3",
+   "group": "reflex"
+  },
+  "alarm|Hello. HELLO. The pen works, I checked.": {
+   "file": "reflex-389d810886.mp3",
+   "group": "reflex"
+  },
+  "alarm|I'm begging. I'm actually begging now.": {
+   "file": "reflex-0bb4109d67.mp3",
+   "group": "reflex"
+  },
+  "alarm|Draw ANYTHING. A worm. A sock. I'll take a sock.": {
+   "file": "reflex-87ab5c82c7.mp3",
+   "group": "reflex"
+  },
+  "alarm|Do you know what Thursday means. THURSDAY.": {
+   "file": "reflex-41006ed396.mp3",
+   "group": "reflex"
+  },
+  "alarm|Any minute now. Any minute. ANY minute.": {
+   "file": "reflex-698e7b04fa.mp3",
+   "group": "reflex"
+  },
+  "alarm|Gerald was right about you.": {
+   "file": "reflex-4a3811333b.mp3",
+   "group": "reflex"
+  },
+  "alarm|This is how it ends. Not with a drawing. With NOTHING.": {
+   "file": "reflex-0522ce33ee.mp3",
+   "group": "reflex"
+  },
+  "alarm|I could have hired a pigeon. The pigeon would be DONE by now.": {
+   "file": "reflex-a5a0c7ff91.mp3",
+   "group": "reflex"
+  },
+  "alarm|I can hear the critics laughing. From HERE. From the FUTURE.": {
+   "file": "reflex-e9d7aafc75.mp3",
+   "group": "reflex"
+  },
+  "alarm|Oh. Good. You're back.": {
+   "file": "reflex-cde5d19f35.mp3",
+   "group": "reflex"
+  },
+  "alarm|Movement. We have movement. Okay.": {
+   "file": "reflex-b736fb37e6.mp3",
+   "group": "reflex"
+  },
+  "alarm|There we go. Continue.": {
+   "file": "reflex-42942bf630.mp3",
+   "group": "reflex"
+  },
+  "alarm|Oh. OH. Okay. Something's happening.": {
+   "file": "reflex-cd9ae3066d.mp3",
+   "group": "reflex"
+  },
+  "alarm|He lives. He DRAWS. Okay okay okay.": {
+   "file": "reflex-b4496cf008.mp3",
+   "group": "reflex"
+  },
+  "alarm|Back. Good. We lost time but we're back.": {
+   "file": "reflex-33cb367025.mp3",
+   "group": "reflex"
+  },
+  "alarm|NOW. Okay. Fine. Now.": {
+   "file": "reflex-7e804b594d.mp3",
+   "group": "reflex"
+  },
+  "alarm|Oh, you're awake. Wonderful. Nine seconds.": {
+   "file": "reflex-afa391813a.mp3",
+   "group": "reflex"
+  },
+  "alarm|Moving. Finally moving. Too late, but moving.": {
+   "file": "reflex-951dfc6ef0.mp3",
+   "group": "reflex"
+  },
+  "suspicion|A circle. Okay. Circles are fine. Circles are FINE.": {
+   "file": "reflex-78e8745ca5.mp3",
+   "group": "reflex"
+  },
+  "suspicion|A circle. Good. Circles are a start.": {
+   "file": "reflex-79a7ae064d.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Round. That's round. I can work with round.": {
+   "file": "reflex-a54ffaaad1.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Another circle. Why do you keep making circles.": {
+   "file": "reflex-7c9e508842.mp3",
+   "group": "reflex"
+  },
+  "suspicion|That circle almost closed. Almost.": {
+   "file": "reflex-b8e6199c36.mp3",
+   "group": "reflex"
+  },
+  "suspicion|That's three circles. THREE.": {
+   "file": "reflex-838bec7f29.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Another circle. Of course. Another circle.": {
+   "file": "reflex-4b2cb25338.mp3",
+   "group": "reflex"
+  },
+  "suspicion|If the next thing is a circle I'm leaving. I mean it.": {
+   "file": "reflex-1bfe230b66.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Circles. Still circles. We're out of TIME.": {
+   "file": "reflex-66fc8a9f35.mp3",
+   "group": "reflex"
+  },
+  "suspicion|A line. One line. Where is this going.": {
+   "file": "reflex-4e33463099.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Straight line. Okay. I can work with a line. Probably.": {
+   "file": "reflex-b719c58261.mp3",
+   "group": "reflex"
+  },
+  "suspicion|A clean line. See, that's fine. That's fine.": {
+   "file": "reflex-85c671ef93.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Another line. Great. We're building a FENCE apparently.": {
+   "file": "reflex-28f599efb3.mp3",
+   "group": "reflex"
+  },
+  "suspicion|More lines. Is it a fence. Tell me it isn't a fence.": {
+   "file": "reflex-0f0724d47d.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Lines. Just lines. Where's the THING.": {
+   "file": "reflex-be588b7404.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Lines. You're still doing LINES.": {
+   "file": "reflex-1eead3f0a3.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Not another line. Please. Not another line.": {
+   "file": "reflex-756d9b020a.mp3",
+   "group": "reflex"
+  },
+  "suspicion|A line. That's what we're spending our last seconds on.": {
+   "file": "reflex-4ce4554d9b.mp3",
+   "group": "reflex"
+  },
+  "alarm|That line wobbled a bit. It's okay. Steady.": {
+   "file": "reflex-42adb086bc.mp3",
+   "group": "reflex"
+  },
+  "alarm|Take your time. The line's shaking.": {
+   "file": "reflex-2113b82a8a.mp3",
+   "group": "reflex"
+  },
+  "alarm|Little wobble. Fine. Breathe.": {
+   "file": "reflex-6e9ca95d7e.mp3",
+   "group": "reflex"
+  },
+  "alarm|Why is the line shaking. Are YOU shaking.": {
+   "file": "reflex-12b217cfb9.mp3",
+   "group": "reflex"
+  },
+  "alarm|That line has anxiety. That makes two of us.": {
+   "file": "reflex-d1c89a2f3b.mp3",
+   "group": "reflex"
+  },
+  "alarm|Is there an earthquake I should know about.": {
+   "file": "reflex-1735d0a550.mp3",
+   "group": "reflex"
+  },
+  "alarm|Your hand is GOING. Hold it steady.": {
+   "file": "reflex-d6544d7d83.mp3",
+   "group": "reflex"
+  },
+  "alarm|Everything's shaking now. Everything.": {
+   "file": "reflex-1a1746acc6.mp3",
+   "group": "reflex"
+  },
+  "alarm|That's not a line, that's a tremor.": {
+   "file": "reflex-46209c6a72.mp3",
+   "group": "reflex"
+  },
+  "suspicion|A dot. Okay. Dots can go somewhere.": {
+   "file": "reflex-166ad118d4.mp3",
+   "group": "reflex"
+  },
+  "suspicion|One dot. Sure. Build on it.": {
+   "file": "reflex-ea0ef5be84.mp3",
+   "group": "reflex"
+  },
+  "suspicion|A dot. Fine. That's a start, technically.": {
+   "file": "reflex-3596b5b721.mp3",
+   "group": "reflex"
+  },
+  "suspicion|A dot. You gave me a dot.": {
+   "file": "reflex-325f71dafb.mp3",
+   "group": "reflex"
+  },
+  "suspicion|A dot. Okay. Is more coming. Please say more is coming.": {
+   "file": "reflex-b6078eb619.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Another dot. We're collecting dots now.": {
+   "file": "reflex-07e8b3a6b8.mp3",
+   "group": "reflex"
+  },
+  "suspicion|One dot. Thursday is RIGHT there and you're doing dots.": {
+   "file": "reflex-54a7f8d8fb.mp3",
+   "group": "reflex"
+  },
+  "suspicion|A DOT. With eight seconds left.": {
+   "file": "reflex-b4f0dea74b.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Dots. He's doing dots. Unbelievable.": {
+   "file": "reflex-ece51d4a9c.mp3",
+   "group": "reflex"
+  },
+  "alarm|Some texture. Okay. I see what you're doing.": {
+   "file": "reflex-6f289ecb35.mp3",
+   "group": "reflex"
+  },
+  "alarm|Filling it in. Alright. Carefully.": {
+   "file": "reflex-e418fb005b.mp3",
+   "group": "reflex"
+  },
+  "alarm|That's a lot of pen. Ease up a bit.": {
+   "file": "reflex-644c8cf68d.mp3",
+   "group": "reflex"
+  },
+  "alarm|Scribbling. Great. We've entered the scribbling phase.": {
+   "file": "reflex-f09c3805d3.mp3",
+   "group": "reflex"
+  },
+  "alarm|That's not shading, that's panic.": {
+   "file": "reflex-b65b0cea61.mp3",
+   "group": "reflex"
+  },
+  "alarm|Why is there so much SCRIBBLE.": {
+   "file": "reflex-1541b60ece.mp3",
+   "group": "reflex"
+  },
+  "alarm|STOP. Stop the scribbling. You're making it WORSE.": {
+   "file": "reflex-453c2f2647.mp3",
+   "group": "reflex"
+  },
+  "alarm|No no no. You're burying it. You're BURYING it.": {
+   "file": "reflex-b9a44aaef6.mp3",
+   "group": "reflex"
+  },
+  "alarm|That's not fixing it. That's a cover-up.": {
+   "file": "reflex-1a9be266a9.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Nice and big. Good. Use the space.": {
+   "file": "reflex-fb32abf05b.mp3",
+   "group": "reflex"
+  },
+  "suspicion|It's growing. That's fine. Keep it contained.": {
+   "file": "reflex-bab556c412.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Big shape. Okay. Committed. I like commitment.": {
+   "file": "reflex-b4a3db38ca.mp3",
+   "group": "reflex"
+  },
+  "suspicion|It's getting bigger. Why is it getting bigger.": {
+   "file": "reflex-026107c491.mp3",
+   "group": "reflex"
+  },
+  "suspicion|It's taking up the whole canvas. Should I be worried. I'm worried.": {
+   "file": "reflex-51c99daa66.mp3",
+   "group": "reflex"
+  },
+  "suspicion|That's the whole canvas now. The WHOLE canvas.": {
+   "file": "reflex-29ee63c31b.mp3",
+   "group": "reflex"
+  },
+  "suspicion|It's eating the canvas and we have NINE seconds.": {
+   "file": "reflex-5e3555d571.mp3",
+   "group": "reflex"
+  },
+  "suspicion|Bigger. It's still getting bigger. Why.": {
+   "file": "reflex-b16fdf9f54.mp3",
+   "group": "reflex"
+  },
+  "suspicion|There's no room left. There's no room LEFT.": {
+   "file": "reflex-7d6b7469f3.mp3",
+   "group": "reflex"
+  },
+  "alarm|Take a beat. It's fine. We have time.": {
+   "file": "reflex-12ce81d133.mp3",
+   "group": "reflex"
+  },
+  "alarm|You stopped. That's okay. Thinking is allowed.": {
+   "file": "reflex-d9d16bf9e5.mp3",
+   "group": "reflex"
+  },
+  "alarm|A pause. Fine. Think it through.": {
+   "file": "reflex-88dd5344dc.mp3",
+   "group": "reflex"
+  },
+  "alarm|You stopped. Why did you stop. Don't do the stopping thing.": {
+   "file": "reflex-5888bb51cd.mp3",
+   "group": "reflex"
+  },
+  "alarm|The staring is not drawing.": {
+   "file": "reflex-275f903a0f.mp3",
+   "group": "reflex"
+  },
+  "alarm|Oh good, a break. We EARNED that.": {
+   "file": "reflex-546c839f1f.mp3",
+   "group": "reflex"
+  },
+  "alarm|HELLO. Still here. Still waiting. Still aging.": {
+   "file": "reflex-8d429469cb.mp3",
+   "group": "reflex"
+  },
+  "alarm|Don't stop NOW. Not now. Not NOW.": {
+   "file": "reflex-f51314ff58.mp3",
+   "group": "reflex"
+  },
+  "alarm|You're STARING. The clock is right there.": {
+   "file": "reflex-4baa6b2df9.mp3",
+   "group": "reflex"
+  },
+  "suspicion|\"sun.\" Fine. I can hang a sun. Probably.": {
+   "file": "opener-0cbd8e2111.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"sun.\" The critics like a sun. Don't ruin this.": {
+   "file": "opener-2657a2ba31.mp3",
+   "group": "opener"
+  },
+  "suspicion|A sun. Okay. Okay okay okay. Show me the sun.": {
+   "file": "opener-cde35acdeb.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"sun.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-fe81dd23e0.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a sun. FINE.": {
+   "file": "closefallback-07024035c7.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"fish.\" Fine. I can hang a fish. Probably.": {
+   "file": "opener-816141e04e.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"fish.\" The critics like a fish. Don't ruin this.": {
+   "file": "opener-61719bf770.mp3",
+   "group": "opener"
+  },
+  "suspicion|A fish. Okay. Okay okay okay. Show me the fish.": {
+   "file": "opener-331ada8fef.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"fish.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-9a30b600e9.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a fish. FINE.": {
+   "file": "closefallback-9ee2299f23.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"house.\" Fine. I can hang a house. Probably.": {
+   "file": "opener-19ded77b17.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"house.\" The critics like a house. Don't ruin this.": {
+   "file": "opener-8702155d9d.mp3",
+   "group": "opener"
+  },
+  "suspicion|A house. Okay. Okay okay okay. Show me the house.": {
+   "file": "opener-e2eead6ccd.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"house.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-d5d1feb1e1.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a house. FINE.": {
+   "file": "closefallback-e288f912d0.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"tree.\" Fine. I can hang a tree. Probably.": {
+   "file": "opener-65f4015494.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"tree.\" The critics like a tree. Don't ruin this.": {
+   "file": "opener-5f3e675d25.mp3",
+   "group": "opener"
+  },
+  "suspicion|A tree. Okay. Okay okay okay. Show me the tree.": {
+   "file": "opener-58623673d7.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"tree.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-7488221d10.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a tree. FINE.": {
+   "file": "closefallback-226b9935fa.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"cat.\" Fine. I can hang a cat. Probably.": {
+   "file": "opener-56515467a8.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"cat.\" The critics like a cat. Don't ruin this.": {
+   "file": "opener-c863e0c224.mp3",
+   "group": "opener"
+  },
+  "suspicion|A cat. Okay. Okay okay okay. Show me the cat.": {
+   "file": "opener-d9a7402fec.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"cat.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-75623a7e1b.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a cat. FINE.": {
+   "file": "closefallback-2cbb92df26.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"cup.\" Fine. I can hang a cup. Probably.": {
+   "file": "opener-699e86eb24.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"cup.\" The critics like a cup. Don't ruin this.": {
+   "file": "opener-5b690b0531.mp3",
+   "group": "opener"
+  },
+  "suspicion|A cup. Okay. Okay okay okay. Show me the cup.": {
+   "file": "opener-ad1ffe7362.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"cup.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-8608b3f7d7.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a cup. FINE.": {
+   "file": "closefallback-3a69046878.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"bicycle.\" Fine. I can hang a bicycle. Probably.": {
+   "file": "opener-da196c8af1.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"bicycle.\" The critics like a bicycle. Don't ruin this.": {
+   "file": "opener-a6cc742ef6.mp3",
+   "group": "opener"
+  },
+  "suspicion|A bicycle. Okay. Okay okay okay. Show me the bicycle.": {
+   "file": "opener-5c55e5ece4.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"bicycle.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-5cbe2dea3c.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a bicycle. FINE.": {
+   "file": "closefallback-ef2e115522.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"snake.\" Fine. I can hang a snake. Probably.": {
+   "file": "opener-25452e9e10.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"snake.\" The critics like a snake. Don't ruin this.": {
+   "file": "opener-5ed95febd8.mp3",
+   "group": "opener"
+  },
+  "suspicion|A snake. Okay. Okay okay okay. Show me the snake.": {
+   "file": "opener-792ccc1c9c.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"snake.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-d98530f958.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a snake. FINE.": {
+   "file": "closefallback-af4da649a8.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"clock.\" Fine. I can hang a clock. Probably.": {
+   "file": "opener-eac91aec97.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"clock.\" The critics like a clock. Don't ruin this.": {
+   "file": "opener-2ef703499a.mp3",
+   "group": "opener"
+  },
+  "suspicion|A clock. Okay. Okay okay okay. Show me the clock.": {
+   "file": "opener-ba48d872cb.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"clock.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-95ceafe3d0.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a clock. FINE.": {
+   "file": "closefallback-fecef7cac1.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"banana.\" Fine. I can hang a banana. Probably.": {
+   "file": "opener-8d493793b3.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"banana.\" The critics like a banana. Don't ruin this.": {
+   "file": "opener-6a61ce89be.mp3",
+   "group": "opener"
+  },
+  "suspicion|A banana. Okay. Okay okay okay. Show me the banana.": {
+   "file": "opener-6362fbef96.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"banana.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-79ce40e968.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a banana. FINE.": {
+   "file": "closefallback-84d1d2d919.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"umbrella.\" Fine. I can hang a umbrella. Probably.": {
+   "file": "opener-e4d329dcbd.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"umbrella.\" The critics like a umbrella. Don't ruin this.": {
+   "file": "opener-8441558197.mp3",
+   "group": "opener"
+  },
+  "suspicion|A umbrella. Okay. Okay okay okay. Show me the umbrella.": {
+   "file": "opener-ebcb60cf30.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"umbrella.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-f5471fe54d.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a umbrella. FINE.": {
+   "file": "closefallback-8f72f48569.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"star.\" Fine. I can hang a star. Probably.": {
+   "file": "opener-4182159a0c.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"star.\" The critics like a star. Don't ruin this.": {
+   "file": "opener-eb1b7be37f.mp3",
+   "group": "opener"
+  },
+  "suspicion|A star. Okay. Okay okay okay. Show me the star.": {
+   "file": "opener-9d6d53caea.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"star.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-5a24dd736c.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a star. FINE.": {
+   "file": "closefallback-dab51a9de4.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"giraffe.\" Fine. I can hang a giraffe. Probably.": {
+   "file": "opener-d0abe3ef27.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"giraffe.\" The critics like a giraffe. Don't ruin this.": {
+   "file": "opener-5b9ad53484.mp3",
+   "group": "opener"
+  },
+  "suspicion|A giraffe. Okay. Okay okay okay. Show me the giraffe.": {
+   "file": "opener-7a0abe16ff.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"giraffe.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-fc692b6bd7.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a giraffe. FINE.": {
+   "file": "closefallback-a6ee87829a.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"windmill.\" Fine. I can hang a windmill. Probably.": {
+   "file": "opener-2f74a45f0e.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"windmill.\" The critics like a windmill. Don't ruin this.": {
+   "file": "opener-bb349d58d0.mp3",
+   "group": "opener"
+  },
+  "suspicion|A windmill. Okay. Okay okay okay. Show me the windmill.": {
+   "file": "opener-c81504d5a7.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"windmill.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-d914cfcb0c.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a windmill. FINE.": {
+   "file": "closefallback-8cacd037c1.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"rocket.\" Fine. I can hang a rocket. Probably.": {
+   "file": "opener-7617875fde.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"rocket.\" The critics like a rocket. Don't ruin this.": {
+   "file": "opener-fd8fe3c515.mp3",
+   "group": "opener"
+  },
+  "suspicion|A rocket. Okay. Okay okay okay. Show me the rocket.": {
+   "file": "opener-363308782d.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"rocket.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-d429f9f203.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a rocket. FINE.": {
+   "file": "closefallback-3e038560e2.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"penguin.\" Fine. I can hang a penguin. Probably.": {
+   "file": "opener-7ac4ce6693.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"penguin.\" The critics like a penguin. Don't ruin this.": {
+   "file": "opener-8ff5f0b958.mp3",
+   "group": "opener"
+  },
+  "suspicion|A penguin. Okay. Okay okay okay. Show me the penguin.": {
+   "file": "opener-1d854cdbe3.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"penguin.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-c7900c0cc0.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a penguin. FINE.": {
+   "file": "closefallback-51bd3cc23c.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"cactus.\" Fine. I can hang a cactus. Probably.": {
+   "file": "opener-3d03a332c1.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"cactus.\" The critics like a cactus. Don't ruin this.": {
+   "file": "opener-bc4a22df3b.mp3",
+   "group": "opener"
+  },
+  "suspicion|A cactus. Okay. Okay okay okay. Show me the cactus.": {
+   "file": "opener-4bafdee0e3.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"cactus.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-bf942b3ad9.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a cactus. FINE.": {
+   "file": "closefallback-72a4462d9e.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"dragon.\" Fine. I can hang a dragon. Probably.": {
+   "file": "opener-23c31ce806.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"dragon.\" The critics like a dragon. Don't ruin this.": {
+   "file": "opener-be034fe38e.mp3",
+   "group": "opener"
+  },
+  "suspicion|A dragon. Okay. Okay okay okay. Show me the dragon.": {
+   "file": "opener-6c46d50254.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"dragon.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-be0ace281f.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a dragon. FINE.": {
+   "file": "closefallback-2a9f1551fb.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"guitar.\" Fine. I can hang a guitar. Probably.": {
+   "file": "opener-3552a6dea7.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"guitar.\" The critics like a guitar. Don't ruin this.": {
+   "file": "opener-1944756921.mp3",
+   "group": "opener"
+  },
+  "suspicion|A guitar. Okay. Okay okay okay. Show me the guitar.": {
+   "file": "opener-b2200a02c2.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"guitar.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-a6cd9ccee3.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a guitar. FINE.": {
+   "file": "closefallback-224ce30acf.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"lighthouse.\" Fine. I can hang a lighthouse. Probably.": {
+   "file": "opener-0f833feb66.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"lighthouse.\" The critics like a lighthouse. Don't ruin this.": {
+   "file": "opener-873aa8e487.mp3",
+   "group": "opener"
+  },
+  "suspicion|A lighthouse. Okay. Okay okay okay. Show me the lighthouse.": {
+   "file": "opener-d5013b6a16.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"lighthouse.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-ecfb45c2d5.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a lighthouse. FINE.": {
+   "file": "closefallback-30e38cc24e.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"octopus.\" Fine. I can hang a octopus. Probably.": {
+   "file": "opener-3ec81d5806.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"octopus.\" The critics like a octopus. Don't ruin this.": {
+   "file": "opener-40cee7bc0b.mp3",
+   "group": "opener"
+  },
+  "suspicion|A octopus. Okay. Okay okay okay. Show me the octopus.": {
+   "file": "opener-7598b83de0.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"octopus.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-2740b43c23.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a octopus. FINE.": {
+   "file": "closefallback-cc105f0504.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"robot.\" Fine. I can hang a robot. Probably.": {
+   "file": "opener-45d959273c.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"robot.\" The critics like a robot. Don't ruin this.": {
+   "file": "opener-4f9ceb4632.mp3",
+   "group": "opener"
+  },
+  "suspicion|A robot. Okay. Okay okay okay. Show me the robot.": {
+   "file": "opener-93a6a17750.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"robot.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-777e655fc3.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a robot. FINE.": {
+   "file": "closefallback-3cb8fb1d5a.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"love.\" Fine. I can hang a love. Probably.": {
+   "file": "opener-7c8bfd1d6e.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"love.\" The critics like a love. Don't ruin this.": {
+   "file": "opener-875d679e54.mp3",
+   "group": "opener"
+  },
+  "suspicion|A love. Okay. Okay okay okay. Show me the love.": {
+   "file": "opener-118b1d8d41.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"love.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-ceb6492cb9.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a love. FINE.": {
+   "file": "closefallback-c1022ee5d6.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"loud.\" Fine. I can hang a loud. Probably.": {
+   "file": "opener-1f9524f7a7.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"loud.\" The critics like a loud. Don't ruin this.": {
+   "file": "opener-34ce8682be.mp3",
+   "group": "opener"
+  },
+  "suspicion|A loud. Okay. Okay okay okay. Show me the loud.": {
+   "file": "opener-e6b9c96ac4.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"loud.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-d2fd8dfa31.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a loud. FINE.": {
+   "file": "closefallback-7bed1fd328.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"Monday.\" Fine. I can hang a Monday. Probably.": {
+   "file": "opener-cba352f721.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"Monday.\" The critics like a Monday. Don't ruin this.": {
+   "file": "opener-96532bf115.mp3",
+   "group": "opener"
+  },
+  "suspicion|A Monday. Okay. Okay okay okay. Show me the Monday.": {
+   "file": "opener-627b59722d.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"Monday.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-a3f853689b.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a Monday. FINE.": {
+   "file": "closefallback-18278c7ab6.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"jealousy.\" Fine. I can hang a jealousy. Probably.": {
+   "file": "opener-d7205f155a.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"jealousy.\" The critics like a jealousy. Don't ruin this.": {
+   "file": "opener-28b6d1388e.mp3",
+   "group": "opener"
+  },
+  "suspicion|A jealousy. Okay. Okay okay okay. Show me the jealousy.": {
+   "file": "opener-5a6164d0c3.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"jealousy.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-8fcbe192d4.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a jealousy. FINE.": {
+   "file": "closefallback-e300dc43f6.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"déjà vu.\" Fine. I can hang a déjà vu. Probably.": {
+   "file": "opener-6764bab93b.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"déjà vu.\" The critics like a déjà vu. Don't ruin this.": {
+   "file": "opener-b84a95aaa7.mp3",
+   "group": "opener"
+  },
+  "suspicion|A déjà vu. Okay. Okay okay okay. Show me the déjà vu.": {
+   "file": "opener-5740b879aa.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"déjà vu.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-c7ffb26ee3.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a déjà vu. FINE.": {
+   "file": "closefallback-e99f6a57f3.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"gravity.\" Fine. I can hang a gravity. Probably.": {
+   "file": "opener-72369397e1.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"gravity.\" The critics like a gravity. Don't ruin this.": {
+   "file": "opener-9f357b6ec3.mp3",
+   "group": "opener"
+  },
+  "suspicion|A gravity. Okay. Okay okay okay. Show me the gravity.": {
+   "file": "opener-66afc33729.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"gravity.\" Gerald said you couldn't. PROVE HIM WRONG.": {
+   "file": "opener-bfb98352b9.mp3",
+   "group": "opener"
+  },
+  "grudge|...fine. It's a gravity. FINE.": {
+   "file": "closefallback-263d707e0d.mp3",
+   "group": "closefallback"
+  },
+  "suspicion|\"cat.\" Again. You and the cats. Okay. Go.": {
+   "file": "opener-5afa487a89.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"dog.\" Again. You and the dogs. Okay. Go.": {
+   "file": "opener-0cb5380209.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"giraffe.\" Again. You and the giraffes. Okay. Go.": {
+   "file": "opener-a7f7e1ebf5.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"dragon.\" Again. You and the dragons. Okay. Go.": {
+   "file": "opener-f2a8347c3f.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"fish.\" Again. You and the fishs. Okay. Go.": {
+   "file": "opener-a545244014.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"octopus.\" Again. You and the octopuss. Okay. Go.": {
+   "file": "opener-230c9d0d66.mp3",
+   "group": "opener"
+  },
+  "suspicion|\"penguin.\" Again. You and the penguins. Okay. Go.": {
+   "file": "opener-b13e790b70.mp3",
+   "group": "opener"
+  },
+  "alarm|Oh. Oh, we're starting OVER. Bold use of our week.": {
+   "file": "fixed-a5a32396ad.mp3",
+   "group": "fixed"
+  },
+  "alarm|The canvas is empty. The canvas is EMPTY.": {
+   "file": "fixed-cac352b2ef.mp3",
+   "group": "fixed"
+  },
+  "alarm|Still nothing. The opening is THURSDAY.": {
+   "file": "fixed-7e5062287c.mp3",
+   "group": "fixed"
+  },
+  "alarm|Wait. Wait wait wait. Is that—": {
+   "file": "fixed-5dd2dbc3d2.mp3",
+   "group": "fixed"
+  },
+  "defeat|Okay. Okay. Give me a second.": {
+   "file": "fixed-351c292f8f.mp3",
+   "group": "fixed"
+  }
+ }
+}

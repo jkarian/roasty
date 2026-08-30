@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Roasty — Draw something. Regret it.</title>
+<style>
+  :root{
+    --ink:#1d1a16;
+    --paper:#f6f2e9;
+    --card:#fffdf7;
+    --accent:#e0562c;
+    --gold:#c9a13b;
+    --quiet:#8a8375;
+    --good:#3e7a4e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
+  body{
+    font-family:Georgia,'Times New Roman',serif;
+    background:var(--paper);
+    color:var(--ink);
+    display:flex;flex-direction:column;
+    height:100dvh;
+    position:fixed;inset:0;width:100%;
+  }
+  #bibleBox{touch-action:pan-y}
+  /* ---------- header ---------- */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 14px 6px;
+  }
+  .brand{font-size:15px;letter-spacing:.06em;font-weight:bold}
+  .brand span{color:var(--accent)}
+  .gallery-tag{font-size:11px;color:var(--quiet);font-style:italic}
+  #settingsBtn,#voiceBtn{
+    font-family:inherit;background:none;border:1px solid var(--quiet);
+    border-radius:6px;color:var(--quiet);font-size:11px;padding:4px 8px;
+  }
+  #voiceBtn.on{border-color:var(--accent);color:var(--accent)}
+  /* ---------- word / timer bar ---------- */
+  .roundbar{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding:2px 14px 8px;
+  }
+  #wordLabel{font-size:13px;color:var(--quiet)}
+  #wordLabel b{font-size:20px;color:var(--ink);letter-spacing:.03em;font-style:italic}
+  #timer{
+    font-size:26px;font-weight:bold;font-variant-numeric:tabular-nums;
+    color:var(--ink);min-width:52px;text-align:right;
+  }
+  #timer.low{color:var(--accent)}
+  /* ---------- canvas ---------- */
+  #canvasWrap{
+    flex:1;margin:0 14px;position:relative;min-height:0;
+    background:var(--card);
+    border:2px solid var(--ink);
+    border-radius:4px;
+    box-shadow:4px 4px 0 rgba(29,26,22,.15);
+  }
+  #pad{width:100%;height:100%;touch-action:none;display:block;border-radius:2px}
+  #canvasVeil{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:14px;text-align:center;
+    background:var(--card);border-radius:2px;padding:24px;
+  }
+  #canvasVeil h1{font-size:30px;line-height:1.15;font-style:italic}
+  #canvasVeil p{color:var(--quiet);font-size:14px;max-width:280px;line-height:1.45}
+  #bigWord{font-size:38px;font-style:italic;letter-spacing:.02em}
+  .btn{
+    font-family:inherit;font-size:16px;
+    background:var(--ink);color:var(--paper);
+    border:none;border-radius:8px;padding:12px 26px;
+    box-shadow:3px 3px 0 rgba(224,86,44,.9);
+  }
+  .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(224,86,44,.9)}
+  .btn.ghost{background:none;color:var(--ink);border:1px solid var(--ink);box-shadow:none}
+  #toolRow{
+    position:absolute;top:8px;right:8px;display:flex;gap:6px;
+  }
+  #toolRow button{
+    font-family:inherit;font-size:11px;background:var(--paper);
+    border:1px solid var(--quiet);border-radius:6px;padding:5px 9px;color:var(--ink);
+  }
+  #resultCard{display:none;flex-direction:column;align-items:center;gap:10px}
+  #resultCard.show{display:flex}
+  #verdict{font-size:26px;font-style:italic}
+  #verdict.win{color:var(--good)}
+  #verdict.loss{color:var(--accent)}
+  #streakLine{font-size:13px;color:var(--quiet)}
+  /* ---------- duck zone ---------- */
+  #duckZone{
+    display:flex;align-items:flex-end;gap:10px;
+    padding:10px 14px 14px;min-height:118px;
+  }
+  #duckSvgWrap{flex:0 0 92px;height:96px}
+  #bubble{
+    flex:1;background:var(--card);
+    border:2px solid var(--ink);border-radius:12px;border-bottom-left-radius:2px;
+    padding:10px 12px;font-size:15px;line-height:1.4;
+    min-height:52px;display:flex;align-items:center;
+    font-style:italic;
+    transition:opacity .2s;
+  }
+  #bubble.quiet{opacity:.55;font-size:13px;color:var(--quiet)}
+  #bubble.thinking::after{content:'…';animation:blink 1s infinite}
+  @keyframes blink{50%{opacity:.2}}
+  .stagedir{color:var(--quiet);font-style:normal;font-size:12px}
+  /* ---------- settings sheet ---------- */
+  #sheet{
+    position:fixed;inset:0;background:rgba(29,26,22,.5);
+    display:none;align-items:flex-end;z-index:50;
+  }
+  #sheet.open{display:flex}
+  #sheetInner{
+    background:var(--paper);width:100%;max-height:86dvh;
+    border-radius:14px 14px 0 0;padding:16px;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  #sheetInner h2{font-size:16px}
+  #sheetInner p{font-size:12px;color:var(--quiet);line-height:1.4}
+  #bibleBox{
+    width:100%;flex:1;min-height:220px;
+    font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.45;
+    border:1px solid var(--quiet);border-radius:8px;padding:10px;
+    background:var(--card);color:var(--ink);resize:none;
+  }
+  .sheetRow{display:flex;gap:8px;justify-content:flex-end}
+  /* duck bounce on meltdown */
+  @keyframes jitter{
+    0%,100%{transform:translate(0,0) rotate(0)}
+    25%{transform:translate(-2px,1px) rotate(-3deg)}
+    75%{transform:translate(2px,-1px) rotate(3deg)}
+  }
+  #duckSvgWrap.melt{animation:jitter .18s infinite}
+  @media (prefers-reduced-motion:reduce){#duckSvgWrap.melt{animation:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="brand">ROASTY<span>.</span></div>
+    <div class="gallery-tag">Gallery Nº1 — behind the vape shop</div>
+  </div>
+  <button id="voiceBtn">🔊 voice</button>
+  <button id="settingsBtn">the duck's&nbsp;instructions</button>
+</header>
+
+<div class="roundbar">
+  <div id="wordLabel">draw: <b id="wordText">—</b></div>
+  <div id="timer">30</div>
+</div>
+
+<div id="canvasWrap">
+  <canvas id="pad"></canvas>
+  <div id="toolRow" style="display:none">
+    <button id="undoBtn">undo</button>
+    <button id="clearBtn">start over</button>
+  </div>
+
+  <div id="canvasVeil">
+    <div id="introBlock">
+      <h1>Draw something.<br>Regret it.</h1>
+      <p>Roasty just opened a gallery. The opening is in one week. Your doodles are, somehow, all he has. He will be watching. He will be guessing. He will not be okay.</p>
+      <br>
+      <button class="btn" id="startBtn">Give him a word</button>
+    </div>
+    <div id="countBlock" style="display:none">
+      <p style="font-size:13px">your word is</p>
+      <div id="bigWord">giraffe</div>
+      <p id="countNum" style="font-size:22px">3</p>
+    </div>
+    <div id="resultCard">
+      <div id="verdict">—</div>
+      <div id="streakLine"></div>
+      <button class="btn" id="againBtn">Another word</button>
+    </div>
+  </div>
+</div>
+
+<div id="duckZone">
+  <div id="duckSvgWrap">
+    <!-- ROASTY -->
+    <svg viewBox="0 0 100 104" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Roasty the duck">
+      <!-- body -->
+      <ellipse cx="50" cy="76" rx="30" ry="24" fill="#f0e6c8" stroke="#1d1a16" stroke-width="2.5"/>
+      <!-- wing -->
+      <path id="wing" d="M32 74 q10 -8 24 -2 q-8 12 -24 8 z" fill="#e2d4a8" stroke="#1d1a16" stroke-width="2"/>
+      <!-- head -->
+      <circle cx="56" cy="34" r="22" fill="#f0e6c8" stroke="#1d1a16" stroke-width="2.5"/>
+      <!-- beak -->
+      <g id="beakGroup">
+        <path id="beakTop" d="M74 32 q16 -2 20 4 q-6 6 -20 4 z" fill="#e0562c" stroke="#1d1a16" stroke-width="2"/>
+        <path id="beakBot" d="M74 40 q13 0 17 3 q-6 5 -17 2 z" fill="#c44822" stroke="#1d1a16" stroke-width="2"/>
+      </g>
+      <!-- eye -->
+      <g id="eyeGroup">
+        <circle id="eyeWhite" cx="60" cy="28" r="8" fill="#fff" stroke="#1d1a16" stroke-width="2"/>
+        <circle id="pupil" cx="62" cy="29" r="3.2" fill="#1d1a16"/>
+        <!-- eyelid for squint: slides down -->
+        <rect id="lid" x="50" y="16" width="20" height="0" fill="#f0e6c8"/>
+        <!-- brow -->
+        <path id="brow" d="M50 18 L70 16" stroke="#1d1a16" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <!-- little sweat drop (alarm) -->
+      <path id="sweat" d="M38 22 q-3 6 0 8 q3 -2 0 -8 z" fill="#7db3d8" stroke="#1d1a16" stroke-width="1.5" opacity="0"/>
+      <!-- tiny 'FOR SALE (please)' sign leaning on him -->
+      <g transform="rotate(-8 14 88)">
+        <rect x="4" y="80" width="22" height="14" rx="1.5" fill="#fffdf7" stroke="#1d1a16" stroke-width="1.5"/>
+        <text x="15" y="86" font-size="4.4" text-anchor="middle" font-family="Georgia" fill="#1d1a16">FOR SALE</text>
+        <text x="15" y="91.5" font-size="3.6" text-anchor="middle" font-family="Georgia" fill="#8a8375">(please)</text>
+      </g>
+    </svg>
+  </div>
+  <div id="bubble" class="quiet">He's setting up the gallery. Allegedly.</div>
+</div>
+
+<!-- settings sheet -->
+<div id="sheet">
+  <div id="sheetInner">
+    <h2>The duck's instructions</h2>
+    <p>This is Roasty's entire personality — the "character bible" the AI writer follows. Edit anything and it applies to the next round. This is the product; the app is just the frame around it.</p>
+    <textarea id="bibleBox" spellcheck="false"></textarea>
+    <p style="margin-top:4px">Joke log — rate them, then copy the dump and paste it to Claude:</p>
+    <div id="jokeList" style="max-height:180px;overflow:auto;border:1px solid var(--quiet);border-radius:8px;padding:6px;background:var(--card);font-size:12px;touch-action:pan-y"></div>
+    <button class="btn ghost" id="dumpBtn" style="align-self:flex-start;font-size:12px;padding:8px 14px">copy critique dump</button>
+    <textarea id="dumpBox" style="display:none;width:100%;height:90px;font-family:ui-monospace,monospace;font-size:10px;border:1px solid var(--quiet);border-radius:8px;padding:8px" spellcheck="false"></textarea>
+    <p style="margin-top:4px">Diagnostics (what the pipeline is doing):</p>
+    <pre id="dbgOut" style="max-height:110px;overflow:auto;font-size:9px;line-height:1.4;background:#1d1a16;color:#9fe0a8;border-radius:8px;padding:8px;white-space:pre-wrap;touch-action:pan-y;user-select:text;-webkit-user-select:text">no calls yet</pre>
+    <div class="sheetRow">
+      <button class="btn ghost" id="resetBible">reset</button>
+      <button class="btn" id="closeSheet">save &amp; close</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>
