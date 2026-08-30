@@ -102,6 +102,41 @@ The vamp covers the wait, and the murmur layer now fills the gap behind it —
 which is why the *perceived* silence is ~3.4s at worst, not 6s. Every live line
 is banked to `cache/tts/`, so the same sentence is instant the second time.
 
+## Modes
+
+Picked on the start screen; `?mode=classic|director` also works, and the choice
+is remembered.
+
+**Classic** — he gives you a word and guesses what you drew. Unchanged.
+
+**Roasty Directs** (experimental) — the inversion. He picks the picture, writes
+the steps, and talks you through it one shape at a time. A blind judge marks the
+result at the end, so you both win or you both don't. 45s.
+
+```
+plan (1 call)  ->  instruct  ->  [pause 2s]  ->  comply check  ->  react
+                       ^                                            |
+                       +--------- advance / repair / move on -------+
+                                                                    v
+                                                    blind judge -> mutual verdict
+```
+
+- `docs/roasty-director-bible.md` — his rules while directing. Served at
+  `/api/bible?mode=director`, editable like the main one. **v0 draft, untested
+  in play** — the session brief referenced rules that did not arrive, so these
+  are written from the main bible's voice and need a tuning pass.
+- The plan never names the subject; any leak is scrubbed before it is spoken.
+- One repair per step, maximum. Then "Fine. FINE. Moving on."
+- Drawing nothing is itself a reaction — he notices being ignored, and it costs
+  no vision call.
+- Everything else is borrowed from Classic: voice pipeline, murmurs, vamps, the
+  composure ladder, bleeps. Joke-log lines are tagged `mode:director`.
+
+Director Mode lives entirely in `public/js/director.js` and takes its shared
+machinery through an injected context. It never reaches into Classic's round
+flow — the only edits in `app.js` are the picker, a dispatcher on the two start
+buttons, and a `mode` field on the joke log.
+
 ## The composure ladder
 
 Which canned pool he draws from is the clock's decision, not the writer's:

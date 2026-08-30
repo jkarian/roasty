@@ -121,9 +121,9 @@ function snapshotB64(){
 
 /* ---------- joke log ---------- */
 const JOKES=[]; // {round, word, kind, line, guess, rating}
-function logJoke(kind,line,guess){
+function logJoke(kind,line,guess,mode){
   if(!line||line==="__SILENCE__")return;
-  JOKES.push({round:S.round,word:S.word,kind,line,guess:guess||"",rating:""});
+  JOKES.push({round:S.round,word:S.word,kind,line,guess:guess||"",rating:"",mode:mode||"classic"});
   renderJokes();
 }
 function renderJokes(){
@@ -146,7 +146,7 @@ document.getElementById("dumpBtn").onclick=()=>{
   const box=document.getElementById("dumpBox");
   box.style.display="block";
   box.value=JOKES.map(j=>
-    `[${j.rating||"unrated"}] (r${j.round}, word:${j.word}, ${j.kind}${j.guess?", guessed:"+j.guess:""}) "${j.line}"`).join("\n")||"(empty)";
+    `[${j.rating||"unrated"}] (mode:${j.mode||"classic"}, r${j.round}, word:${j.word}, ${j.kind}${j.guess?", guessed:"+j.guess:""}) "${j.line}"`).join("\n")||"(empty)";
   box.focus(); box.select();
 };
 
@@ -522,8 +522,82 @@ function pickOpener(word){
   return OPENERS[Math.floor(Math.random()*OPENERS.length)](word);
 }
 
-document.getElementById("startBtn").onclick=startRound;
-document.getElementById("againBtn").onclick=startRound;
+/* =========================================================
+   MODE PICKER
+   Classic is the original round flow, untouched. Director Mode lives
+   entirely in director.js and borrows this file's machinery through a
+   context object — it never reaches into Classic's own flow.
+   ========================================================= */
+let MODE="classic";
+let director=null;
+const MODE_BLURB={
+  classic:"He gives you a word and guesses what you drew.",
+  director:"He picks the picture and talks you through it, one shape at a time. A stranger judges the result. You both win or you both don't."
+};
+const MODE_CTA={classic:"Give him a word", director:"Let him direct"};
+function setMode(m){
+  MODE=m;
+  document.querySelectorAll(".modeBtn").forEach(b=>b.classList.toggle("on",b.dataset.mode===m));
+  document.getElementById("modeBlurb").textContent=MODE_BLURB[m];
+  document.getElementById("startBtn").textContent=MODE_CTA[m];
+  try{ localStorage.setItem("roasty-mode",m); }catch(e){}
+}
+document.querySelectorAll(".modeBtn").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+
+/** shared presence beat — Classic starts it inline; Director uses these */
+function startPresence(){ S.murmurGap=rollGap(); clearInterval(S.pulseId); S.pulseId=setInterval(murmurPulse,200); }
+function stopPresence(){ clearInterval(S.pulseId); }
+
+/** the result card, for Director (Classic keeps its own inline version) */
+function showResult({won,verdict,sub}){
+  const v=document.getElementById("verdict");
+  v.textContent=verdict;
+  v.className=won?"win":"loss";
+  document.getElementById("streakLine").textContent=
+    `${sub} · round ${S.round} · ${S.wins} hung · streak ${S.streak}`;
+  veil.style.display="flex";
+  veil.style.background="transparent";
+  veil.style.pointerEvents="none";
+  resultCard.classList.add("show");
+  resultCard.style.pointerEvents="auto";
+  resultCard.style.background="rgba(255,253,247,.92)";
+  resultCard.style.padding="16px 22px";
+  resultCard.style.borderRadius="12px";
+  resultCard.style.border="2px solid var(--ink)";
+}
+
+async function beginRound(){
+  audio.unlock().catch(e=>dbg("audio unlock FAILED: "+e.message));
+  if(MODE!=="director") return startRound();
+  if(!director){
+    const {createDirector}=await import("./director.js");
+    director=createDirector({
+      S, say, audio, ticker, dbg, callClaude, parseJSON, snapshotB64,
+      setFace, thinking, logJoke, isMatch, pickWord,
+      sizeCanvas, redraw, startPresence, stopPresence, showResult, squintQuietly,
+      els:{
+        wordText:document.getElementById("wordText"), timer:timerEl, veil,
+        intro, countBlock, resultCard, toolRow, bubble,
+        bigWord:document.getElementById("bigWord"), countNum:document.getElementById("countNum")
+      }
+    });
+    window.__roasty.director=director;
+  }
+  return director.start();
+}
+
+document.getElementById("startBtn").onclick=beginRound;
+document.getElementById("againBtn").onclick=beginRound;
+document.getElementById("backToModes").onclick=()=>{
+  if(director) director.stop();
+  audio.stop();
+  resultCard.classList.remove("show");
+  veil.style.display="flex"; veil.style.background=""; veil.style.pointerEvents="";
+  intro.style.display="block";
+  S.phase="idle";
+  bubble.classList.add("quiet");
+  bubble.textContent="He's setting up the gallery. Allegedly.";
+};
 
 function startRound(){
   audio.unlock().catch(e=>dbg("audio unlock FAILED: "+e.message)); // this click is our iOS gesture
@@ -834,6 +908,9 @@ async function boot(){
   renderJokes();
 
   const qs=new URLSearchParams(location.search);
+  let m=qs.get("mode");
+  if(m!=="classic"&&m!=="director"){ try{ m=localStorage.getItem("roasty-mode"); }catch(e){ m=null; } }
+  setMode(m==="director"?"director":"classic");
   if(qs.has("dev")){ ticker.show(); dbg("dev ticker on"); }
   if(qs.has("selftest")) selfTest();
 }
