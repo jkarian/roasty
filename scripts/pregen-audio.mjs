@@ -18,7 +18,15 @@ import path from "node:path";
 import readline from "node:readline";
 import { CONFIG, ROOT } from "../lib/config.mjs";
 import { synth, clipId, taggedText, mp3Seconds, minPlausibleSeconds } from "../lib/eleven.mjs";
-import { buildAudioLibrary } from "../public/js/lines.js";
+import { buildAudioLibrary, parseWords, setWords } from "../public/js/lines.js";
+
+// same source of truth as the app: docs/words.md
+try {
+  const n = setWords(parseWords(fs.readFileSync(path.join(ROOT, "docs", "words.md"), "utf8")));
+  if (n) console.log(`words    ${n} from docs/words.md`);
+} catch (e) {
+  console.log("words    docs/words.md unreadable, using built-in list");
+}
 
 const args = process.argv.slice(2);
 const has = (f) => args.includes(f);

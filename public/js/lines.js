@@ -5,13 +5,86 @@
    Every string here is verbatim from poc/roasty-poc.html.
    ========================================================= */
 
-/* ---------- word list (tiered) — docs/words.md ---------- */
+/* =========================================================
+   WORD LIST — docs/words.md is the source of truth.
+   Parsed at boot from /api/words (and from disk by the pre-gen script), so
+   words can be added by editing the markdown, with no code change.
+   The values below are only the fallback if that file cannot be read.
+   ========================================================= */
 export const WORDS = {
   easy:["sun","fish","house","tree","cat","cup","bicycle","snake","clock","banana","umbrella","star"],
   medium:["giraffe","windmill","rocket","penguin","cactus","dragon","guitar","lighthouse","octopus","robot"],
   hard:["love","loud","Monday","jealousy","déjà vu","gravity"]
 };
-export const ALL_WORDS = [...WORDS.easy, ...WORDS.medium, ...WORDS.hard];
+export let ALL_WORDS = [...WORDS.easy, ...WORDS.medium, ...WORDS.hard];
+
+/* Which markdown heading feeds which difficulty tier. "Hard objects" and
+   "Concepts" are both marked "streak 3+, mixed in", so they share `hard` —
+   pickWord() is untouched. They stay separately addressable in `.tiers`. */
+const TIER_OF = [
+  [/^easy\b/i,             "easy"],
+  [/^medium\b/i,           "medium"],
+  [/^hard\b/i,             "hard"],
+  [/^concepts?\b/i,        "hard"]
+];
+
+/**
+ * Parse docs/words.md. Tolerant of backslash-escaped markdown (\#, \-) and
+ * of entries wrapped across several lines. The "Notes for the app" section
+ * and any prose outside a tier heading are ignored.
+ */
+export function parseWords(md) {
+  const out = { easy: [], medium: [], hard: [], tiers: {} };
+  const sections = [];              // {tier, key, text}
+  let cur = null;
+
+  for (let raw of String(md).split(/\r?\n/)) {
+    const line = raw.replace(/\\(?=[#\-*_.])/g, "").replace(/&#x20;/g, " ").trim();
+    if (!line) continue;
+    const h = line.match(/^#{1,6}\s*(.+)$/);
+    if (h) {
+      const key = h[1].trim().replace(/\s*\(.*$/, "").trim();
+      const hit = TIER_OF.find(([re]) => re.test(key));
+      cur = hit ? { tier: hit[1], key, text: "" } : null;   // Notes etc -> skip
+      if (cur) sections.push(cur);
+      continue;
+    }
+    if (!cur) continue;
+    if (/^[-*]\s/.test(line)) continue;         // bullet prose inside a section
+    if (/^[A-Z][a-z]+:/.test(line)) continue;   // "Rule:" style prose
+    // Join with a space, never a break: an entry may wrap across lines
+    // ("...stage fright, brain \n freeze, awkward silence...").
+    cur.text += (cur.text ? " " : "") + line;
+  }
+
+  for (const s of sections) {
+    out.tiers[s.key] = out.tiers[s.key] || [];
+    for (const w of s.text.split(",")) {
+      const word = w.trim().replace(/\.$/, "").replace(/\s+/g, " ");
+      if (!word || word.length > 24) continue;
+      out[s.tier].push(word);
+      out.tiers[s.key].push(word);
+    }
+  }
+  // dedupe inside a tier, and keep the hardest home for anything listed twice
+  const claimed = new Set();
+  for (const t of ["hard", "medium", "easy"]) {
+    out[t] = [...new Set(out[t])].filter((w) => !claimed.has(w));
+    out[t].forEach((w) => claimed.add(w));
+  }
+  return out;
+}
+
+/** swap in a freshly parsed list; returns how many words are now live */
+export function setWords(parsed) {
+  if (!parsed || !parsed.easy?.length) return 0;
+  WORDS.easy = parsed.easy;
+  WORDS.medium = parsed.medium.length ? parsed.medium : WORDS.medium;
+  WORDS.hard = parsed.hard.length ? parsed.hard : WORDS.hard;
+  WORDS.tiers = parsed.tiers;
+  ALL_WORDS = [...new Set([...WORDS.easy, ...WORDS.medium, ...WORDS.hard])];
+  return ALL_WORDS.length;
+}
 
 /* ---------- instant vamps: he reacts NOW, punchline arrives later ---------- */
 export const VAMPS = ["Wait. What is that.","Hold on. Hold on.","Okay what am I looking at. What AM I looking at.","Wait wait wait.","Hold on. Let me look. LET ME LOOK.","Whaaaat is— hold on.","Wh— okay. Okay. Looking."];

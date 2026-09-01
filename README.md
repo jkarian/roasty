@@ -60,7 +60,11 @@ tell them apart.
 - `docs/roasty-bible.md` — THE character. Served to the app at `/api/bible`.
 - `docs/voice.md` — canonical ElevenLabs voice (ID inside)
 - `docs/roasty-voice-brief.md` — how the voice was designed/auditioned
-- `docs/words.md` — tiered word list
+- `docs/words.md` — tiered word list. **The source of truth**: parsed at boot
+  from `/api/words`, so adding a word is a file edit and a refresh, no code
+  change. Headings map `Easy`→easy, `Medium`→medium, `Hard objects` +
+  `Concepts`→hard (both are "streak 3+, mixed in", so `pickWord` is unchanged).
+  Entries may wrap across lines; escaped markdown (`\#`) is tolerated.
 - `docs/cc-kickoff.md` — first Claude Code session brief
 
 ## How a round talks

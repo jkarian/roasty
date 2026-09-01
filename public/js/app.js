@@ -10,7 +10,8 @@
 import {
   WORDS, VAMPS, MURMURS, REFLEX, REFLEX_FACE, EXCLAIMS,
   OPENERS, REPEAT_WORDS, repeatOpener, winFallback,
-  tierFor, poolFor, hasBleep, splitBleep, bleepForScreen, hasProfanity
+  tierFor, poolFor, hasBleep, splitBleep, bleepForScreen, hasProfanity,
+  parseWords, setWords
 } from "./lines.js";
 import { RoastyAudio } from "./audio.js";
 import { Ticker } from "./ticker.js";
@@ -892,6 +893,13 @@ async function boot(){
     DEFAULT_BIBLE=await (await fetch("/api/bible")).text();
   }catch(e){ dbg("bible load FAILED: "+e.message); }
   try{ bible=localStorage.getItem("roasty-bible")||DEFAULT_BIBLE; }catch(e){ bible=DEFAULT_BIBLE; }
+
+  // the word list lives in docs/words.md — edit the file, refresh, done
+  try{
+    const n=setWords(parseWords(await (await fetch("/api/words",{cache:"no-cache"})).text()));
+    dbg(n?`words: ${n} loaded (${WORDS.easy.length} easy / ${WORDS.medium.length} medium / ${WORDS.hard.length} hard)`
+         :"words: file unusable, using built-in list");
+  }catch(e){ dbg("words load FAILED, using built-in list: "+e.message); }
 
   try{
     const h=await (await fetch("/api/health")).json();
