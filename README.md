@@ -58,6 +58,11 @@ tell them apart.
 - `scripts/pregen-audio.mjs` — the one-time audio library cutter
 - `poc/roasty-poc.html` — the original artifact-era prototype, kept for reference
 - `docs/roasty-bible.md` — THE character. Served to the app at `/api/bible`.
+  Drawing/realtime mode only (Classic + Director).
+- `docs/roasty-wall-label-bible.md` — Wall Label Roasty (Instagram). Separate
+  mode, separate file, served at `/api/bible?mode=walllabel`. See below.
+- `public/label.html`, `public/js/label.js`, `public/label/quack.wav` — the
+  Wall Label test bench at `/label`
 - `docs/voice.md` — canonical ElevenLabs voice (ID inside)
 - `docs/roasty-voice-brief.md` — how the voice was designed/auditioned
 - `docs/words.md` — tiered word list. **The source of truth**: parsed at boot
@@ -140,6 +145,88 @@ Director Mode lives entirely in `public/js/director.js` and takes its shared
 machinery through an injected context. It never reaches into Classic's round
 flow — the only edits in `app.js` are the picker, a dispatcher on the two start
 buttons, and a `mode` field on the joke log.
+
+## Wall Label Roasty (`/label` bench)
+
+A new format, separate from the drawing game. People tag @roastytheduck on
+Instagram with their own photo or video; Roasty narrates a short "film" about
+it, played over their image. The character rules are in
+`docs/roasty-wall-label-bible.md`; this section is how the bench works and
+where we left off.
+
+**The voice (per the bible):** a 1950s American educational-film narrator,
+cheerfully authoritative, observing the human like a naturalist. Script order:
+opening beat (naturalist observation) → title card → who made it → where/when
+(invented habitat names, never real place names) → materials → measurement →
+the lesson → where it came from → asking price. Bite, delivery tags
+(`[curious] [whispers] [amused] [sighs] [excited]`, 2–4 per script), pauses,
+and at most one character break (`[QUACK]` or a duck exclamation, then
+"Pardon me." and carry on).
+
+**Why it's a separate file:** `/api/bible` serves the whole file and the
+drawing Writer sends it as-is every call, so anything added to
+`roasty-bible.md` goes live in drawing mode. Director Mode already solved this
+with its own file; Wall Label copies that pattern. The one line added to
+`roasty-bible.md` (a mode label) sits above "YOU ARE ROASTY", which the server
+strips, so the drawing prompt is byte-identical to before.
+
+**The bench, step by step:**
+1. Drop one image, or a video under 60s. Images are downscaled to 1568px.
+   Videos: 10 evenly spaced frames pulled in the browser (1024px), each sent
+   with a "Frame N of 10, at 0:03.2" label, and Claude is told it's a motion
+   picture of X seconds, frames in order.
+2. One `/api/claude` call (`purpose: "label"`, Sonnet 5, bible prompt-cached,
+   4000 tokens, cap raised to 6000 for this purpose only) writes 3 scripts in
+   `=== SCRIPT n ===` blocks, shown side by side with word + tag counts.
+3. Pick one. Voice ID field (defaults to the drawing voice from `.env`;
+   remembered in localStorage), stability + style sliders.
+4. The script is cut at every `[QUACK]`; each piece goes to `/api/label-tts`
+   in parallel; the page plays piece → `public/label/quack.wav` → piece.
+   Tag-only pieces (e.g. `[excited]` right before a quack) are dropped.
+   Remembers the last break used and tells Claude not to repeat it.
+5. Image (or muted video, looping while he talks, then finishing its pass)
+   with the script beside it, Replay / Stop.
+
+**Voice model:** `eleven_v3`, because only v3 performs the delivery tags. The
+cost: stability snaps to 0 / 0.5 / 1 and style is ignored (the page disables
+that slider). `ELEVEN_MODEL_LABEL=eleven_multilingual_v2` gets continuous
+sliders back but strips the tags. Label clips are cached in `cache/tts/` by
+voice + settings + text, so replays are free.
+
+**Config:** `CLAUDE_MODEL_LABEL` (falls back to `CLAUDE_MODEL_WRITE`),
+`ELEVEN_MODEL_LABEL`, `ELEVEN_FORMAT_LABEL`.
+
+**Tested:** image → 3 scripts end to end; 10 synthetic timestamped frames → 3
+motion-picture scripts that read them as a sequence; `/api/label-tts` on v2 and
+v3 (with tags); voice-ID validation. **Not yet tested:** in-browser frame
+extraction and video playback (the automation tab was hidden, and Chrome won't
+decode video in hidden tabs) — just drop a clip in a visible tab.
+
+### Open items (pick up here)
+
+- **Voice: resolved.** The "wrong voice" report was a false alarm. The
+  narrator (`INlzb6xeYqy5GoEu1Oel`) is now the bench default
+  (`ELEVENLABS_VOICE_ID_LABEL`); drawing mode keeps `ELEVENLABS_VOICE_ID`.
+- **ElevenLabs credits** ran out once mid-session (quota 30k). Offered: a
+  credit estimate next to "Speak it". Scripts got longer with the opening beat.
+- **Bible tuning.** Test scripts slipped: "vibe" (internet-ironic), a quack
+  placed after provenance with no triggering detail, "one (1)". The reference
+  scripts predate the opening beat, habitat names and tags — offered to add an
+  example of each.
+- **Optional:** a label-only extended-thinking switch (`CLAUDE_THINKING` is
+  shared with drawing mode and would slow it down); Opus for the writer via
+  `CLAUDE_MODEL_LABEL`.
+- **Placeholder quack** — replace `public/label/quack.wav` (an mp3 also works;
+  change `QUACK_URL` in `label.js`).
+- **Video:** 60s cap (Reels can be longer — trim or raise the cap); iPhone
+  HEVC `.mov` usually won't decode in Chrome on Windows; no timing sync and no
+  transcription of the clip's own audio yet (by design for now).
+- **Instagram in production:** the bench takes files only. The real flow is the
+  Instagram Graph API mention webhook, which hands the server a media URL.
+- Decisions already made: separate bible file; roasting exaggerated visible
+  features allowed (with the never-list), drawing mode's ban unchanged; the
+  new character-break rules replace the old curator's-note meltdown; the
+  personification exception and no cross-post callbacks stay.
 
 ## The composure ladder
 
