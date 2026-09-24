@@ -148,9 +148,9 @@ buttons, and a `mode` field on the joke log.
 
 ## Wall Label Roasty (`/label` bench)
 
-A new format, separate from the drawing game. People tag @roastytheduck on
-Instagram with their own photo or video; Roasty narrates a short "film" about
-it, played over their image. The character rules are in
+A new format, separate from the drawing game. The MVP: you drop in your own
+clip, Roasty narrates a short "film" about it, and the bench renders a video
+to post on Instagram and TikTok. Later, people tag @roastytheduck themselves. The character rules are in
 `docs/roasty-wall-label-bible.md`; this section is how the bench works and
 where we left off.
 
@@ -174,18 +174,60 @@ strips, so the drawing prompt is byte-identical to before.
 1. Drop one image, or a video under 60s. Images are downscaled to 1568px.
    Videos: 10 evenly spaced frames pulled in the browser (1024px), each sent
    with a "Frame N of 10, at 0:03.2" label, and Claude is told it's a motion
-   picture of X seconds, frames in order.
-2. One `/api/claude` call (`purpose: "label"`, Sonnet 5, bible prompt-cached,
-   4000 tokens, cap raised to 6000 for this purpose only) writes 3 scripts in
-   `=== SCRIPT n ===` blocks, shown side by side with word + tag counts.
-3. Pick one. Voice ID field (defaults to the drawing voice from `.env`;
-   remembered in localStorage), stability + style sliders.
-4. The script is cut at every `[QUACK]`; each piece goes to `/api/label-tts`
+   picture of X seconds, frames in order. The original file uploads to the
+   server in the background for the render (a still goes as a 2160px JPEG the
+   browser drew, so phone photos arrive upright).
+2. One `/api/claude` call (`purpose: "label"`) writes a one-line plain
+   description of the post, then 3 scripts, each with a caption
+   (`=== POST ===`, `=== SCRIPT n ===`, `=== CAPTION n ===`). The label call
+   uses Opus 5.5 at effort `high` with thinking on (it isn't live, so it can
+   afford it), 16k tokens. About 10¢ a post.
+   **Writer picker:** "quick" = Sonnet 5 with no thinking (the writer of
+   the first funny scripts, ~10s, ~4¢); "deep" = Opus 5.5 thinking (~1–2 min).
+   The first Opus run felt less funny than Sonnet the day before, but three
+   things changed at once (model, thinking, word budget); compare on one clip.
+   **Running time:** the clip rounded up to 20 / 30 / 45 / 60s (stills 30s),
+   or the Length picker. Claude gets a word budget (`(secs − 2.1) × 2.4`
+   words) and the bible's "Running time" rules say which beats to drop; each
+   card shows its estimated length, red if over.
+3. **Stars.** Click any line you love. Stars change nothing; each click
+   appends a row (line, full script, the post description, model) to
+   `data/label-stars.jsonl`: raw material for bible examples later. We
+   decided against splicing starred lines between scripts: it makes them
+   disjointed.
+   **Every write is saved** per video: a readable
+   `data/label-posts/<date_time_file>.md` (each rewrite and render appended,
+   with writer, length, post description, scripts, captions, and the script +
+   caption + music actually rendered) and a row per event in
+   `data/label-posts.jsonl` for analysis. Length also has **No limit**.
+4. Pick one; it opens in the **Final script** box, which you edit by hand
+   (bring in lines from the other scripts, cut to length; live word + seconds
+   count). Speak and Render use the edited text; the post record marks it
+   edited and keeps the original. Voice ID field (defaults to the narrator, remembered in
+   localStorage), stability + style sliders.
+5. The script is cut at every `[QUACK]`; each piece goes to `/api/label-tts`
    in parallel; the page plays piece → `public/label/quack.wav` → piece.
    Tag-only pieces (e.g. `[excited]` right before a quack) are dropped.
    Remembers the last break used and tells Claude not to repeat it.
-5. Image (or muted video, looping while he talks, then finishing its pass)
-   with the script beside it, Replay / Stop.
+6. Image (or muted video, looping while he talks) with the script beside it,
+   Replay / Stop.
+7. **Post it.** Editable caption, music pick (`music/` at the repo root; Random picks one per render), Render
+   video → `/api/label-render` → a 1080×1920 H.264/AAC MP4 in
+   `cache/label/renders/`, previewed on the page, with Save video + Copy
+   caption. Posting is by hand for now.
+
+**The render (`lib/render.mjs`, ffmpeg via the `ffmpeg-static` package):** the
+post fitted into a dark frame with a gilt edge on a pale gallery wall, 0.6s of
+wall before he speaks, 1.5s after. The video is exactly the running time
+(a longer clip is cut, a shorter one holds its last frame) unless the
+narration overruns, which the status line reports. The clip's own sound is off. A clip shorter
+than the narration holds its last frame; a longer one plays out. Narration
+segments come from the same cache as the bench, so rendering a script you
+already heard costs no credits. Tracks are loudness-levelled first (they
+are mastered ~5 dB apart), then loop to length, duck whenever he talks
+(sidechain compressor) and fade out over the tail; level via
+`LABEL_MUSIC_VOLUME` (0.4). Drop new tracks in `music/`; the page lists them
+on load. Renders take a second or two.
 
 **Voice model:** `eleven_v3`, because only v3 performs the delivery tags. The
 cost: stability snaps to 0 / 0.5 / 1 and style is ignored (the page disables
@@ -193,40 +235,63 @@ that slider). `ELEVEN_MODEL_LABEL=eleven_multilingual_v2` gets continuous
 sliders back but strips the tags. Label clips are cached in `cache/tts/` by
 voice + settings + text, so replays are free.
 
-**Config:** `CLAUDE_MODEL_LABEL` (falls back to `CLAUDE_MODEL_WRITE`),
-`ELEVEN_MODEL_LABEL`, `ELEVEN_FORMAT_LABEL`.
+**Config:** `CLAUDE_MODEL_LABEL` (default `claude-opus-5-5`),
+`CLAUDE_EFFORT_LABEL` (`high`), `ELEVENLABS_VOICE_ID_LABEL`,
+`ELEVEN_MODEL_LABEL`, `ELEVEN_FORMAT_LABEL`, `LABEL_MUSIC_VOLUME`.
+
+**Setup note:** `ffmpeg-static` downloads its binary in an install script. If
+npm blocks install scripts, run `npm approve-scripts ffmpeg-static` then
+`npm rebuild ffmpeg-static`.
 
 **Tested:** image → 3 scripts end to end; 10 synthetic timestamped frames → 3
-motion-picture scripts that read them as a sequence; `/api/label-tts` on v2 and
-v3 (with tags); voice-ID validation. **Not yet tested:** in-browser frame
-extraction and video playback (the automation tab was hidden, and Chrome won't
-decode video in hidden tabs) — just drop a clip in a visible tab.
+motion-picture scripts; `/api/label-tts` on v2 and v3; renders of a still and
+a short landscape clip with narration, quack and music (frames and levels
+checked); upload / render / star endpoints; the Opus 5.5 label call.
+**Not yet tested:** a full run in the browser with a real post (scripts →
+stars → render → save).
 
 ### Open items (pick up here)
 
-- **Voice: resolved.** The "wrong voice" report was a false alarm. The
-  narrator (`INlzb6xeYqy5GoEu1Oel`) is now the bench default
-  (`ELEVENLABS_VOICE_ID_LABEL`); drawing mode keeps `ELEVENLABS_VOICE_ID`.
+- **Posting, step 2: Instagram.** Needs @roastytheduck switched to a Creator
+  account (it's a normal account today) and a Meta developer app. The
+  Instagram API pulls the video from a public URL, so the local file needs a
+  short-lived public link (Cloudflare tunnel or a storage bucket). Check
+  Meta's current docs before building.
+- **Posting, step 3: TikTok.** Unaudited apps can only post privately, so MVP
+  is "send to drafts", then tap Post in the app. Check TikTok's current docs.
+- **Next sprint: the subject's own voice.** When the person in the clip says
+  something that matters to the joke, the narration pauses and their audio
+  comes up. Needs a timestamped transcript of the clip, Claude writing the
+  pause into the script, and the render timing narration to the clip (there
+  is no sync today).
+- **Music:** four tracks in `music/` (three 60s, "Wonders of the Everyday
+  Molecule" 30s, which loops on clips over ~28s). They look AI-generated:
+  check the plan they came from allows commercial use before posting. ~40 MB
+  of WAV. `music/`, `sourceMedia/` and `data/` are gitignored (the repo is
+  public); back them up separately.
+- **Calibrate the word rate.** 2.4 spoken words/second (`WORDS_PER_S` in
+  `label.js`) is an estimate. After a few renders, compare the status line's
+  narration seconds with the card's word count and adjust.
+- **Render look:** stills are static (no slow zoom yet); landscape clips sit
+  small on the vertical wall.
 - **ElevenLabs credits** ran out once mid-session (quota 30k). Offered: a
   credit estimate next to "Speak it". Scripts got longer with the opening beat.
 - **Bible tuning.** Test scripts slipped: "vibe" (internet-ironic), a quack
   placed after provenance with no triggering detail, "one (1)". The reference
   scripts predate the opening beat, habitat names and tags — offered to add an
-  example of each.
-- **Optional:** a label-only extended-thinking switch (`CLAUDE_THINKING` is
-  shared with drawing mode and would slow it down); Opus for the writer via
-  `CLAUDE_MODEL_LABEL`.
-- **Placeholder quack** — replace `public/label/quack.wav` (an mp3 also works;
-  change `QUACK_URL` in `label.js`).
+  example of each. Mine `data/label-stars.jsonl` for examples once it has some.
+- **Placeholder quack** — replace `public/label/quack.wav` (used by both the
+  page and the render; an mp3 also works if both paths change).
 - **Video:** 60s cap (Reels can be longer — trim or raise the cap); iPhone
-  HEVC `.mov` usually won't decode in Chrome on Windows; no timing sync and no
-  transcription of the clip's own audio yet (by design for now).
-- **Instagram in production:** the bench takes files only. The real flow is the
-  Instagram Graph API mention webhook, which hands the server a media URL.
+  HEVC `.mov` usually won't decode in Chrome on Windows (the server's ffmpeg
+  could pull the frames instead).
+- **Instagram tagging (later):** the real tag flow is the Instagram Graph API
+  mention webhook, which hands the server a media URL.
 - Decisions already made: separate bible file; roasting exaggerated visible
   features allowed (with the never-list), drawing mode's ban unchanged; the
   new character-break rules replace the old curator's-note meltdown; the
-  personification exception and no cross-post callbacks stay.
+  personification exception and no cross-post callbacks stay; stars log taste
+  only, no splicing.
 
 ## The composure ladder
 

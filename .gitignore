@@ -8,3 +8,11 @@ node_modules/
 public/audio/*.mp3
 cache/
 npm-debug.log*
+
+# Wall Label: kept out of the (public) repo
+# your clips (real people, other people's videos)
+sourceMedia/
+# licensing unchecked
+music/
+# taste log + post records (they describe people in the clips)
+data/

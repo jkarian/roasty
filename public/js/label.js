@@ -1,7 +1,8 @@
 /* =========================================================
    WALL LABEL BENCH (/label)
-   drop image -> Writer (wall label bible) writes 3 scripts -> pick one
-   -> cut at [QUACK] -> ElevenLabs per segment -> play with quacks between.
+   drop image -> Writer (wall label bible) writes 3 scripts + captions
+   (star lines you love: taste log) -> pick one -> cut at [QUACK] ->
+   ElevenLabs per segment -> play with quacks between -> render the MP4 to post.
    Separate from drawing mode: it shares only /api/claude and the server.
    ========================================================= */
 const $ = (id) => document.getElementById(id);
@@ -18,7 +19,10 @@ const store = {
   set(k, v) { try { localStorage.setItem(k, v); } catch {} }
 };
 
-const state = { media: null, scripts: [], picked: null, clips: [], playing: null };
+const state = {
+  media: null, upload: null, postId: "", fileName: "", post: "", scripts: [], captions: [], model: "",
+  picked: null, clips: [], playing: null
+};
 
 /* ---------- health ---------- */
 let defaultVoiceId = "";
@@ -49,6 +53,34 @@ async function loadBible() {
 /* ---------- 1. image or video in ---------- */
 const VIDEO_MAX_S = 60;
 const FRAMES = 10;
+
+/* running time: the clip rounded up to 20 / 30 / 45 / 60s, stills 30s, or
+   whatever the Length picker says. Claude gets a word budget for it. */
+const LENGTHS = [20, 30, 45, 60];
+const WORDS_PER_S = 2.4;   // the narrator's pace, pauses included (estimate — check renders)
+const WALL_S = 2.1;        // render.mjs LEAD + TAIL: music only, nobody talking
+const STILL_S = 30;
+$("writer").value = store.get("roasty-label-writer", "quick");
+$("writer").onchange = () => {
+  store.set("roasty-label-writer", $("writer").value);
+  if (state.scripts.length) setStatus("writeStatus", `Writer changed — hit "Write 3 new ones" to compare on this post.`);
+};
+$("length").value = store.get("roasty-label-length", "auto");
+$("length").onchange = () => {
+  store.set("roasty-label-length", $("length").value);
+  if (state.picked) countFinal();
+  if (state.scripts.length) setStatus("writeStatus", `Length is now ${targetSeconds() ? targetSeconds() + "s" : "unlimited"} — hit "Write 3 new ones" to apply it.`);
+};
+function targetSeconds() {
+  const v = $("length").value;
+  if (v === "none") return 0; // no budget: the film runs as long as he talks
+  if (v !== "auto") return +v;
+  const m = state.media;
+  if (!m || m.kind !== "video") return STILL_S;
+  return LENGTHS.find((n) => m.duration <= n) || LENGTHS[LENGTHS.length - 1];
+}
+const wordBudget = (secs) => Math.floor((secs - WALL_S) * WORDS_PER_S);
+const spokenWords = (s) => untagged(s.replace(QUACK, "")).split(/\s+/).filter(Boolean).length;
 const drop = $("drop");
 drop.onclick = () => $("file").click();
 $("file").onchange = (e) => e.target.files[0] && takeFile(e.target.files[0]);
@@ -82,7 +114,10 @@ function prepImage(file) {
     const img = new Image();
     img.onload = () => {
       const dataUrl = toJpeg(img, img.naturalWidth, img.naturalHeight, 1568, 0.9);
-      resolve({ kind: "image", url, poster: url, b64: dataUrl.split(",")[1] });
+      // the render gets a bigger copy, drawn by the browser so phone photos
+      // arrive the right way up (and HEIC arrives as JPEG)
+      const full = toJpeg(img, img.naturalWidth, img.naturalHeight, 2160, 0.92);
+      resolve({ kind: "image", url, poster: url, b64: dataUrl.split(",")[1], full });
     };
     img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("couldn't read that image")); };
     img.src = url;
@@ -148,6 +183,12 @@ async function takeFile(file) {
   } catch (e) { return setStatus("dropStatus", e.message, true); }
   if (state.media) URL.revokeObjectURL(state.media.url);
   state.media = media;
+  state.picked = null;
+  state.postId = postIdFor(file);
+  state.fileName = file.name;
+  $("postSec").classList.add("hidden");
+  state.upload = uploadMedia(file, media);
+  state.upload.catch(() => {}); // surfaced when Render asks for it
   $("thumb").src = media.poster;
   $("thumb").classList.remove("hidden");
   const isVid = media.kind === "video";
@@ -158,10 +199,40 @@ async function takeFile(file) {
   writeScripts();
 }
 
+/** "2026-09-24_2305_beach-clip": names this post's file in data/label-posts/ */
+function postIdFor(file) {
+  const d = new Date(), p = (n) => String(n).padStart(2, "0");
+  const slug = file.name.replace(/.[^.]+$/, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "post";
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}_${slug}`;
+}
+
+/** save a write or a render to this post's record (data/label-posts/) */
+function logPost(event, fields) {
+  fetch("/api/label-log", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      event, postId: state.postId, file: state.fileName, kind: state.media?.kind || "",
+      duration: state.media?.duration || 0, ...fields
+    })
+  }).catch(() => {});
+}
+
+/** send the post to the server in the background, for Render. Resolves to its upload id. */
+async function uploadMedia(file, media) {
+  const blob = media.kind === "image" ? await (await fetch(media.full)).blob() : file;
+  const name = media.kind === "image" ? "post.jpg" : file.name;
+  const res = await fetch("/api/label-upload?name=" + encodeURIComponent(name), { method: "POST", body: blob });
+  const d = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(`upload ${res.status}: ${(d && d.error) || ""}`);
+  return d.id;
+}
+
 /* ---------- 2. three scripts ---------- */
 function prompt() {
   const last = store.get("roasty-label-lastbreak", "");
   const m = state.media;
+  const secs = targetSeconds();
   const what = m && m.kind === "video"
     ? `This post is a motion picture: a ${m.duration.toFixed(1)}-second video. Above are ${m.frames.length} frames from it, in order, each labeled with its timestamp. Narrate it as a motion picture, following your bible.`
     : "The image above is the post.";
@@ -170,22 +241,44 @@ function prompt() {
 === THIS POST ===
 ${what} The person who posted it tagged you. Write 3 complete scripts for it, following every rule in your bible.
 
+${secs ? `Running time: ${secs} seconds. That is at most ${wordBudget(secs)} spoken words per script (delivery tags and [QUACK] don't count). Fit it the way your bible's running-time rules say.` : "Running time: no limit. Use the full format."}
+
 Make the three genuinely different: build each one around a different main detail or angle, with a different title and a different closer. Do not reuse sentences between them.
 Character breaks: at most one per script, only when a detail truly earns it. At least one of the three scripts has no break.${last ? `\nThe previous post's break was ${last}. Don't use that one.` : ""}
 
 Write only the words the narrator speaks: no headings, no beat labels, no stage directions, no markdown, no quotation marks around the whole thing. The only bracketed tokens allowed are [QUACK] and the delivery tags from your bible's palette. Separate paragraphs with a blank line.
 
+Give each script its own caption, following your bible.
+
 Reply in exactly this format and nothing else:
+=== POST ===
+(one plain sentence saying what the post shows, not in character)
 === SCRIPT 1 ===
 (script)
+=== CAPTION 1 ===
+(caption)
 === SCRIPT 2 ===
 (script)
+=== CAPTION 2 ===
+(caption)
 === SCRIPT 3 ===
-(script)`;
+(script)
+=== CAPTION 3 ===
+(caption)`;
 }
 
-function parseScripts(txt) {
-  return txt.split(/^\s*=+\s*SCRIPT\s*\d+\s*=+\s*$/im).map((s) => s.trim()).filter(Boolean).slice(0, 3);
+/** the reply's === POST === / === SCRIPT n === / === CAPTION n === sections */
+function parseReply(txt) {
+  const out = { post: "", scripts: [], captions: [] };
+  const parts = txt.split(/^\s*=+\s*(POST|SCRIPT\s*\d+|CAPTION\s*\d+)\s*=+\s*$/im);
+  for (let i = 1; i < parts.length; i += 2) {
+    const head = parts[i].toUpperCase(), body = (parts[i + 1] || "").trim();
+    if (head === "POST") out.post = body;
+    else if (head.startsWith("SCRIPT") && body) out.scripts.push(body);
+    else if (head.startsWith("CAPTION")) out.captions[out.scripts.length - 1] = body;
+  }
+  out.scripts = out.scripts.slice(0, 3);
+  return out;
 }
 
 /** a still is one image; a video is its frames, each preceded by its timestamp */
@@ -213,7 +306,8 @@ async function writeScripts() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         purpose: "label",
-        max_tokens: 4000,
+        writer: $("writer").value,
+        max_tokens: 16000,
         messages: [{ role: "user", content: [
           { type: "text", text: await loadBible(), cache_control: { type: "ephemeral" } },
           ...mediaBlocks(state.media),
@@ -224,11 +318,12 @@ async function writeScripts() {
     const data = await res.json().catch(() => null);
     if (!res.ok) throw new Error(`Claude ${res.status}: ${(data && data.error) || ""}`.slice(0, 300));
     if (seq !== writeSeq) return;
-    const scripts = parseScripts(data.text || "");
-    if (!scripts.length) throw new Error("couldn't find any scripts in the reply:\n" + (data.text || "").slice(0, 400));
-    state.scripts = scripts;
+    const reply = parseReply(data.text || "");
+    if (!reply.scripts.length) throw new Error("couldn't find any scripts in the reply:\n" + (data.text || "").slice(0, 400));
+    Object.assign(state, reply, { model: data.model });
     renderScripts();
-    setStatus("writeStatus", `${scripts.length} scripts in ${((performance.now() - t0) / 1000).toFixed(1)}s · ${data.model}` +
+    logPost("scripts", { model: data.model, target: targetSeconds(), post: reply.post, scripts: reply.scripts, captions: reply.captions });
+    setStatus("writeStatus", `${reply.scripts.length} scripts in ${((performance.now() - t0) / 1000).toFixed(1)}s · ${data.model}` +
       (data.cacheRead ? " · bible cached" : ""));
   } catch (e) {
     if (seq === writeSeq) setStatus("writeStatus", e.message, true);
@@ -245,13 +340,42 @@ function scriptHTML(s) {
     .replace(TAG, (t) => `<span class="tag">${t.slice(1, -1)}</span>`);
 }
 
+/** a paragraph cut into sentences; "..." is a pause inside one, not an end */
+const SENTENCE = /(?:[^.!?…]|\.{2,}|…)+(?:[.!?]+["'”’)\]]*|$)\s*/g;
+
+/** script text as star-able sentences, paragraphs kept */
+function starHTML(s) {
+  return s.split(/\n\s*\n/).map((para) =>
+    (para.match(SENTENCE) || [para]).map((line) =>
+      `<span class="line" title="Star a line you love">${scriptHTML(line)}</span>`).join("")
+  ).join("\n\n");
+}
+
+/** stars only feed the taste log (data/label-stars.jsonl); they change nothing on screen but the mark */
+function star(el, script) {
+  const starred = el.classList.toggle("starred");
+  fetch("/api/label-star", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      line: el.textContent.trim(), starred, script, post: state.post, postId: state.postId,
+      kind: state.media?.kind || "", model: state.model || ""
+    })
+  }).catch(() => {});
+}
+
 function renderScripts() {
   $("scripts").innerHTML = "";
   state.scripts.forEach((s, i) => {
     const card = document.createElement("div");
     card.className = "card script";
-    card.innerHTML = `<div class="n">Script ${i + 1} · ${untagged(s.replace(QUACK, "")).split(/\s+/).length} words · ${(s.replace(QUACK, "").match(TAG) || []).length} tags</div>
-      <div class="text">${scriptHTML(s)}</div>`;
+    const words = spokenWords(s);
+    const est = Math.round(words / WORDS_PER_S + WALL_S);
+    const over = targetSeconds() && est > targetSeconds();
+    card.innerHTML = `<div class="n">Script ${i + 1} · ${words} words · ${(s.replace(QUACK, "").match(TAG) || []).length} tags · <span${over ? ' class="over"' : ""}>~${est}s${targetSeconds() ? ` of ${targetSeconds()}s` : ""}</span></div>
+      <div class="text">${starHTML(s)}</div>` +
+      (state.captions[i] ? `<div class="caption">${scriptHTML(state.captions[i])}</div>` : "");
+    card.querySelectorAll(".line").forEach((el) => { el.onclick = () => star(el, s); });
     const btn = document.createElement("button");
     btn.textContent = "Use this one";
     btn.onclick = () => pick(i, card);
@@ -264,6 +388,12 @@ function pick(i, card) {
   document.querySelectorAll(".script").forEach((c) => c.classList.remove("picked"));
   card.classList.add("picked");
   state.picked = state.scripts[i];
+  state.pickedIndex = i;
+  $("editor").value = state.picked;
+  countFinal();
+  $("caption").value = state.captions[i] || "";
+  resetRender();
+  $("postSec").classList.remove("hidden");
   const used = BREAKS.find((b) => state.picked.toLowerCase().includes(b.toLowerCase()));
   if (used) store.set("roasty-label-lastbreak", `"${used}"`);
   $("finalText").innerHTML = scriptHTML(state.picked);
@@ -272,8 +402,29 @@ function pick(i, card) {
   stop();
   state.clips = [];
   $("replay").disabled = true;
-  setStatus("voiceStatus", "Picked script " + (i + 1) + ". Set the voice and hit Speak it.");
+  setStatus("voiceStatus", "Picked script " + (i + 1) + ". Edit it if you like, then hit Speak it.");
 }
+
+/* the final script: the picked one, edited by hand. Speak and Render use this. */
+function countFinal() {
+  const words = spokenWords(state.picked || "");
+  const est = Math.round(words / WORDS_PER_S + WALL_S);
+  const target = targetSeconds();
+  const over = target && est > target;
+  $("finalCount").innerHTML = `${words} words · <span${over ? ' class="over"' : ""}>~${est}s${target ? ` of ${target}s` : ""}</span>` +
+    (state.picked !== state.scripts[state.pickedIndex] ? " · edited" : "");
+}
+$("editor").oninput = () => {
+  state.picked = $("editor").value;
+  $("finalText").innerHTML = scriptHTML(state.picked);
+  countFinal();
+  // the old narration no longer matches the words
+  stop();
+  state.clips = [];
+  $("replay").disabled = true;
+  resetRender();
+  setStatus("voiceStatus", "Script edited. Hit Speak it to hear the new version.");
+};
 
 /* ---------- 3. voice ---------- */
 $("voiceId").value = store.get("roasty-label-voice", "");
@@ -384,6 +535,85 @@ function stop() {
 }
 $("replay").onclick = play;
 $("stop").onclick = stop;
+
+/* ---------- 5. post it: render + caption ---------- */
+/* tracks live in music/ at the repo root; "Quirks_in_the_News_2026-09-24T203317.wav" shows as "Quirks in the News" */
+const RANDOM = "__random__";
+const trackName = (t) => t.replace(/\.[^.]+$/, "").replace(/_\d{4}-\d\d-\d\dT\d+$/, "").replace(/[-_]+/g, " ");
+let tracks = [];
+fetch("/api/label-music").then((r) => r.json()).then((d) => {
+  tracks = d.tracks;
+  if (tracks.length > 1) $("music").add(new Option("Random", RANDOM));
+  for (const t of tracks) $("music").add(new Option(trackName(t), t));
+  const fallback = tracks.length > 1 ? RANDOM : tracks[0] || "";
+  const saved = store.get("roasty-label-music", fallback);
+  $("music").value = [...$("music").options].some((o) => o.value === saved) ? saved : fallback;
+}).catch(() => {});
+$("music").onchange = () => store.set("roasty-label-music", $("music").value);
+const pickTrack = () => $("music").value === RANDOM
+  ? tracks[Math.floor(Math.random() * tracks.length)]
+  : $("music").value;
+
+function resetRender() {
+  $("renderVid").removeAttribute("src");
+  $("renderVid").classList.add("hidden");
+  $("saveVid").classList.add("hidden");
+  setStatus("renderStatus", "");
+}
+
+async function render() {
+  if (!state.picked || !state.upload) return;
+  stop();
+  resetRender();
+  $("render").disabled = true;
+  setStatus("renderStatus", "Rendering… (new narration is voiced first, if you haven't played it)");
+  const t0 = performance.now();
+  try {
+    const mediaId = await state.upload.catch((e) => { throw new Error("The file never reached the server — " + e.message); });
+    const music = pickTrack();
+    const res = await fetch("/api/label-render", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mediaId, kind: state.media.kind, seconds: state.media.duration || 0, target: targetSeconds(),
+        segments: segments(state.picked),
+        voiceId: $("voiceId").value.trim() || defaultVoiceId,
+        stability: +$("stability").value, style: +$("style").value,
+        music
+      })
+    });
+    const d = await res.json().catch(() => null);
+    if (!res.ok) throw new Error(`Render ${res.status}: ${(d && d.error) || ""}`.slice(0, 300));
+    $("renderVid").src = d.url;
+    $("renderVid").classList.remove("hidden");
+    $("saveVid").href = d.url;
+    $("saveVid").download = d.name;
+    $("saveVid").classList.remove("hidden");
+    const target = targetSeconds();
+    const overBy = d.seconds - target;
+    logPost("render", { video: d.name, seconds: d.seconds, narration: d.narration, target, music: music ? trackName(music) : "", script: state.picked, caption: $("caption").value, model: state.model,
+      pickedFrom: state.pickedIndex + 1, edited: state.picked !== state.scripts[state.pickedIndex],
+      original: state.picked !== state.scripts[state.pickedIndex] ? state.scripts[state.pickedIndex] : undefined });
+    setStatus("renderStatus", `${d.seconds.toFixed(1)}s video (narration ${d.narration.toFixed(1)}s), rendered in ${((performance.now() - t0) / 1000).toFixed(1)}s` +
+      (music ? ` · music: ${trackName(music)}` : " · no music") +
+      (target && overBy > 0.5 ? ` · ran ${overBy.toFixed(1)}s past ${target}s` : "") + ".");
+  } catch (e) {
+    setStatus("renderStatus", e.message, true);
+  } finally {
+    $("render").disabled = false;
+  }
+}
+$("render").onclick = render;
+
+$("copyCap").onclick = async () => {
+  try {
+    await navigator.clipboard.writeText($("caption").value);
+    setStatus("renderStatus", "Caption copied.");
+  } catch {
+    $("caption").select();
+    setStatus("renderStatus", "Couldn't reach the clipboard; the caption is selected, press Ctrl+C.", true);
+  }
+};
 
 function setStatus(id, msg, err = false) {
   $(id).textContent = msg;
