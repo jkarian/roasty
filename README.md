@@ -154,8 +154,10 @@ to post on Instagram and TikTok. Later, people tag @roastytheduck themselves. Th
 `docs/roasty-wall-label-bible.md`; this section is how the bench works and
 where we left off.
 
-**The voice (per the bible):** a 1950s American educational-film narrator,
-cheerfully authoritative, observing the human like a naturalist. Script order:
+**The voice (per the bible):** a reverent nature-documentary naturalist
+(Attenborough is the model; never named) inside an old educational film's
+frame. Hushed wonder, small discoveries ("Ah! Now here…"), insults delivered
+as admiring natural history. Changed 2026-09-24 from a brisk 1950s announcer. Script order:
 opening beat (naturalist observation) → title card → who made it → where/when
 (invented habitat names, never real place names) → materials → measurement →
 the lesson → where it came from → asking price. Bite, delivery tags
@@ -228,6 +230,14 @@ are mastered ~5 dB apart), then loop to length, duck whenever he talks
 (sidechain compressor) and fade out over the tail; level via
 `LABEL_MUSIC_VOLUME` (0.4). Drop new tracks in `music/`; the page lists them
 on load. Renders take a second or two.
+
+**Subtitles (style B, "film print"):** bold white Gelasio (a free
+Georgia-alike, `assets/fonts/`, OFL) with a black outline, lower third, up to
+3 words at a time, clear of the Reels/TikTok buttons. Word times come from
+ElevenLabs forced alignment on the voiced clips (cached as `.words.json` beside
+each mp3). If alignment fails (e.g. the API key lacks the
+`forced_alignment` permission), words are spread by length instead and the
+status line says "estimated". Toggle: Subtitles checkbox in Post it.
 
 **Voice model:** `eleven_v3`, because only v3 performs the delivery tags. The
 cost: stability snaps to 0 / 0.5 / 1 and style is ignored (the page disables

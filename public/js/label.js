@@ -550,6 +550,8 @@ fetch("/api/label-music").then((r) => r.json()).then((d) => {
   $("music").value = [...$("music").options].some((o) => o.value === saved) ? saved : fallback;
 }).catch(() => {});
 $("music").onchange = () => store.set("roasty-label-music", $("music").value);
+$("subtitles").checked = store.get("roasty-label-subtitles", "on") === "on";
+$("subtitles").onchange = () => store.set("roasty-label-subtitles", $("subtitles").checked ? "on" : "off");
 const pickTrack = () => $("music").value === RANDOM
   ? tracks[Math.floor(Math.random() * tracks.length)]
   : $("music").value;
@@ -579,7 +581,8 @@ async function render() {
         segments: segments(state.picked),
         voiceId: $("voiceId").value.trim() || defaultVoiceId,
         stability: +$("stability").value, style: +$("style").value,
-        music
+        music,
+        subtitles: $("subtitles").checked
       })
     });
     const d = await res.json().catch(() => null);
@@ -596,6 +599,7 @@ async function render() {
       original: state.picked !== state.scripts[state.pickedIndex] ? state.scripts[state.pickedIndex] : undefined });
     setStatus("renderStatus", `${d.seconds.toFixed(1)}s video (narration ${d.narration.toFixed(1)}s), rendered in ${((performance.now() - t0) / 1000).toFixed(1)}s` +
       (music ? ` · music: ${trackName(music)}` : " · no music") +
+      (d.subtitles === "estimated" ? " · subtitle timing estimated (alignment failed, see server log)" : d.subtitles ? " · subtitles" : "") +
       (target && overBy > 0.5 ? ` · ran ${overBy.toFixed(1)}s past ${target}s` : "") + ".");
   } catch (e) {
     setStatus("renderStatus", e.message, true);
